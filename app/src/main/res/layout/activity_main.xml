@@ -1,5 +1,10 @@
+<!-- One pane layout primarily targeting phones -->
+
+<!-- News headlines fragment -->
 <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:id="@+id/fragment"
-    android:name="com.ravi.apps.android.newsbytes.MainActivityFragment"
-    tools:layout="@layout/fragment_main" android:layout_width="match_parent"
-    android:layout_height="match_parent" />
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_headlines"
+    android:name="com.ravi.apps.android.newsbytes.HeadlinesFragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:layout="@layout/fragment_headlines"/>

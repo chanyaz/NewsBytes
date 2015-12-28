@@ -1,0 +1,25 @@
+<!-- Two pane layout primarily targeting tablets and large-screen phones -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:baselineAligned="false"
+    android:divider="?android:attr/dividerVertical">
+
+    <!-- News headlines fragment -->
+    <fragment
+        android:id="@+id/fragment_headlines"
+        android:name="com.ravi.apps.android.newsbytes.HeadlinesFragment"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"/>
+
+    <!-- Contains the news details fragment -->
+    <FrameLayout
+        android:id="@+id/news_details_container"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
+
+</LinearLayout>

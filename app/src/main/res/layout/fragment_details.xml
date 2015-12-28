@@ -1,0 +1,88 @@
+<!-- Displays the news story details -->
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:gravity="center_vertical"
+        android:layout_gravity="left"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Photo -->
+        <ImageView
+            android:id="@+id/photo_imageview"
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            android:scaleType="centerCrop"/>
+
+        <!-- Caption -->
+        <TextView
+            android:id="@+id/caption_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-condensed"
+            android:textSize="12sp"/>
+
+        <!-- Headline -->
+        <TextView
+            android:id="@+id/headline_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-condensed"
+            android:textSize="18sp"/>
+
+        <!-- Author -->
+        <TextView
+            android:id="@+id/author_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-condensed"
+            android:textSize="12sp"/>
+
+        <!-- Date -->
+        <TextView
+            android:id="@+id/date_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-condensed"
+            android:textSize="12sp"/>
+
+        <!-- Summary -->
+        <TextView
+            android:id="@+id/summary_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-condensed"
+            android:textSize="14sp"/>
+
+        <!-- Mark As Favorite and Read More -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <!-- Mark As Favorite -->
+            <Button
+                android:id="@+id/mark_favorite_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/mark_as_favorite" />
+
+            <!-- Read More -->
+            <Button
+                android:id="@+id/read_more_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/read_more" />
+
+        </LinearLayout>
+
+        <!-- Share FAB -->
+
+    </LinearLayout>
+
+</ScrollView>

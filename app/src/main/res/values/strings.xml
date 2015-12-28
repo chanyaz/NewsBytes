@@ -1,5 +1,21 @@
 <resources>
-    <string name="app_name">NewsBytes</string>
+    <string name="app_name">NEWS Bytes</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_details">DetailsActivity</string>
+
+
+    <!-- Mark as favorite -->
+    <string name="mark_as_favorite">MARK AS\nFAVORITE</string>
+    <!-- Read more -->
+    <string name="read_more">READ\nMORE</string>
+
+    <!-- Status message in empty list view depicting data load operation -->
+    <string name="msg_status_loading">Loading data, please wait...</string>
+
+
+
+
+
+
 </resources>
