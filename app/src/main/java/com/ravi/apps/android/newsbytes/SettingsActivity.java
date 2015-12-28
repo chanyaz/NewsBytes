@@ -16,23 +16,21 @@
 
 package com.ravi.apps.android.newsbytes;
 
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.support.v7.app.AppCompatActivity;
 
-/**
- * A placeholder fragment containing a simple view.
- */
-public class DetailsFragment extends Fragment {
-
-    public DetailsFragment() {
-    }
+public class SettingsActivity extends AppCompatActivity {
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_details, container, false);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_settings);
+
+        // Create the settings fragment.
+        if(savedInstanceState == null) {
+            getFragmentManager().beginTransaction()
+                    .add(R.id.settings_container, new SettingsFragment())
+                    .commit();
+        }
     }
 }

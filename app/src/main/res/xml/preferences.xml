@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- User preference for news story category -->
+    <ListPreference
+        android:key="@string/pref_news_category_key"
+        android:title="@string/pref_news_category_title"
+        android:dialogTitle="@string/pref_news_category_title"
+        android:entries="@array/pref_news_category_entries"
+        android:entryValues="@array/pref_news_category_entry_values"
+        android:defaultValue="@string/pref_news_category_world"/>
+
+</PreferenceScreen>
