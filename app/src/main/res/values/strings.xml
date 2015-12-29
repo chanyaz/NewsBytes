@@ -8,7 +8,7 @@
 
 
     <!-- The New York Times API key -->
-    <string name="tnyt_api_key">key</string>
+    <string name="nyt_api_key">key</string>
 
     <!-- Key for news category preference -->
     <string name="pref_news_category_key" translatable="false">news_category_key</string>
@@ -28,6 +28,10 @@
     <string name="pref_news_category_sports">5</string>
     <!-- News category preference : Favorites -->
     <string name="pref_news_category_favorites">6</string>
+
+    <!-- Sync adapter related -->
+    <string name="sync_account_type">newsbytes.android.apps.ravi.com</string>
+    <string name="content_authority">com.ravi.apps.android.newsbytes</string>
 
     <!-- Mark as favorite -->
     <string name="mark_as_favorite">MARK AS\nFAVORITE</string>
