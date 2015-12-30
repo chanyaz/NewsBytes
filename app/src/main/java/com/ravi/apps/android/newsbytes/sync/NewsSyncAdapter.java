@@ -52,7 +52,7 @@ import java.util.Vector;
 public class NewsSyncAdapter extends AbstractThreadedSyncAdapter {
 
     // Tag for logging messages.
-    public final String LOG_TAG = NewsSyncAdapter.class.getSimpleName();
+    public static final String LOG_TAG = NewsSyncAdapter.class.getSimpleName();
 
     // Base URL for the query.
     private final String NYT_BASE_URL = "http://api.nytimes.com/svc/topstories/v1/";
@@ -89,6 +89,8 @@ public class NewsSyncAdapter extends AbstractThreadedSyncAdapter {
 
     // Interval at which to sync with the news server, in seconds.
     public static final int SYNC_INTERVAL = 60 * 60;    // One hour.
+//    public static final int SYNC_INTERVAL = 60 * 10;    // Three minutes.
+
     public static final int SYNC_FLEXTIME = SYNC_INTERVAL/3;
 
     public NewsSyncAdapter(Context context, boolean autoInitialize) {
@@ -96,6 +98,8 @@ public class NewsSyncAdapter extends AbstractThreadedSyncAdapter {
     }
 
     public static void initializeSyncAdapter(Context context) {
+        Log.d(LOG_TAG, "initializeSyncAdapter");
+
         getSyncAccount(context);
     }
 
@@ -105,6 +109,8 @@ public class NewsSyncAdapter extends AbstractThreadedSyncAdapter {
      * onAccountCreated method so we can initialize things.
      */
     public static Account getSyncAccount(Context context) {
+        Log.d(LOG_TAG, "getSyncAccount");
+
         // Get an instance of the android account manager.
         AccountManager accountManager =
                 (AccountManager) context.getSystemService(Context.ACCOUNT_SERVICE);
@@ -125,21 +131,12 @@ public class NewsSyncAdapter extends AbstractThreadedSyncAdapter {
         return newAccount;
     }
 
-    private static void onAccountCreated(Account newAccount, Context context) {
-        // Configure the sync.
-        NewsSyncAdapter.configurePeriodicSync(context, SYNC_INTERVAL, SYNC_FLEXTIME);
-
-        // Enable periodic sync.
-        ContentResolver.setSyncAutomatically(newAccount, context.getString(R.string.content_authority), true);
-
-        // Trigger an immediate sync to get the ball rolling!
-        syncImmediately(context);
-    }
-
     /**
      * Schedules periodic execution of the sync adapter.
      */
     public static void configurePeriodicSync(Context context, int syncInterval, int flexTime) {
+        Log.d(LOG_TAG, "configurePeriodicSync");
+
         // Get account and authority.
         Account account = getSyncAccount(context);
         String authority = context.getString(R.string.content_authority);
@@ -160,6 +157,8 @@ public class NewsSyncAdapter extends AbstractThreadedSyncAdapter {
      * Instructs the sync adapter to sync immediately.
      */
     public static void syncImmediately(Context context) {
+        Log.d(LOG_TAG, "syncImmediately");
+
         Bundle bundle = new Bundle();
         bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
         bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
@@ -169,7 +168,7 @@ public class NewsSyncAdapter extends AbstractThreadedSyncAdapter {
 
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
-        Log.d(LOG_TAG, "Starting sync");
+        Log.d(LOG_TAG, "onPerformSync");
 
         HttpURLConnection httpURLConnection = null;
         BufferedReader bufferedReader = null;
@@ -183,6 +182,10 @@ public class NewsSyncAdapter extends AbstractThreadedSyncAdapter {
             // Set the news section query param value based on preference.
             String newsCategory = null;
             if(newsCategoryPreference
+                    .equals(getContext().getString(R.string.pref_news_category_favorites))) {
+                // If favorites category is selected, no need to do a sync - simply return.
+                return;
+            } else if(newsCategoryPreference
                     .equals(getContext().getString(R.string.pref_news_category_world))) {
                 newsCategory = NYT_SECTION_WORLD;
             } else if(newsCategoryPreference
@@ -210,6 +213,7 @@ public class NewsSyncAdapter extends AbstractThreadedSyncAdapter {
 
             // Create the url for connecting to NYT server.
             URL url = new URL(uri.toString());
+            Log.d(LOG_TAG, url.toString());
 
             // Create the request to NYT server and open the connection.
             httpURLConnection = (HttpURLConnection) url.openConnection();
@@ -228,10 +232,10 @@ public class NewsSyncAdapter extends AbstractThreadedSyncAdapter {
 
             // Convert the string buffer to string.
             newsJsonStr = stringBuffer.toString();
+            Log.d(LOG_TAG, newsJsonStr);
 
             // Parse the JSON string and extract the news data.
             getNewsDataFromJson(newsJsonStr);
-
         } catch(IOException e) {
             Log.e(LOG_TAG, "Error: loadInBackground(): " + e.getLocalizedMessage());
         } catch(JSONException e) {
@@ -251,7 +255,6 @@ public class NewsSyncAdapter extends AbstractThreadedSyncAdapter {
                 }
             }
         }
-
         return;
     }
 
@@ -265,39 +268,59 @@ public class NewsSyncAdapter extends AbstractThreadedSyncAdapter {
             JSONObject newsJson = new JSONObject(newsJsonStr);
 
             // Get the JSON array containing the results.
-            JSONArray resultsJsonArray = newsJson.getJSONArray(NYT_RESULTS);
+            JSONArray resultsJsonArray = null;
+            if(newsJson.has(NYT_RESULTS)
+                    && newsJson.get(NYT_RESULTS) instanceof JSONArray
+                    && newsJson.getJSONArray(NYT_RESULTS) != null
+                    && newsJson.getJSONArray(NYT_RESULTS).length() != 0) {
+                resultsJsonArray = newsJson.getJSONArray(NYT_RESULTS);
+            } else {
+                // Query did not return any results, log message and return.
+                Log.d(LOG_TAG, getContext().getString(R.string.msg_err_zero_results));
+                return;
+            }
 
             // Get length of the results array.
             int resultsLength = resultsJsonArray.length();
 
-            // Parse the results array only if it's not empty.
-            if(resultsLength != 0) {
-                // Create a vector of content values to hold the news stories.
-                Vector<ContentValues> vectorContentValues = new Vector<ContentValues>(resultsLength);
+            // Create a vector of content values to hold the news stories.
+            Vector<ContentValues> vectorContentValues = new Vector<ContentValues>(resultsLength);
 
-                // Traverse the json array extracting each result.
-                for(int i = 0; i < resultsLength; i++) {
-                    // Get the JSON object corresponding to a news story.
-                    JSONObject jsonNewsStory = resultsJsonArray.getJSONObject(i);
+            // Traverse the json array extracting each news story.
+            for(int i = 0; i < resultsLength; i++) {
+                // Get the JSON object corresponding to a news story.
+                JSONObject jsonNewsStory = resultsJsonArray.getJSONObject(i);
 
-                    // Extract the news story attributes from the JSON object.
-                    String headline = jsonNewsStory.getString(NYT_TITLE);
-                    String summary = jsonNewsStory.getString(NYT_ABSTRACT);
-                    String uriStory = jsonNewsStory.getString(NYT_URL);
-                    String author = jsonNewsStory.getString(NYT_BYLINE);
-                    String date = jsonNewsStory.getString(NYT_PUBLISHED_DATE);
-                    String uriThumbnail = null;
-                    String thumbnail = null;
-                    String captionThumbnail = null;
-                    String copyrightThumbnail = null;
-                    String uriPhoto = null;
-                    String photo = null;
-                    String captionPhoto = null;
-                    String copyrightPhoto = null;
-                    int isFavorite = 0; // Will be true when marked as favorite, false for now.
+                // Extract the headline from the JSON object.
+                String headline = null;
 
-                    // Extract the related thumbnail and photo from the multimedia array element.
-                    JSONArray multimediaJsonArray = jsonNewsStory.getJSONArray(NYT_MULTIMEDIA);
+                // Check if headline exists and is a non-empty string.
+                if(jsonNewsStory.has(NYT_TITLE)
+                        && jsonNewsStory.get(NYT_TITLE) instanceof String
+                        && !jsonNewsStory.getString(NYT_TITLE).isEmpty()) {
+                    headline = jsonNewsStory.getString(NYT_TITLE);
+                } else {
+                    // No headline found, skip this story.
+                    continue;
+                }
+
+                // Extract the thumbnail and photo from the JSON object.
+                JSONArray multimediaJsonArray = null;
+                String uriThumbnail = null;
+                byte[] thumbnail = null;    // Stores a blob when marked as favorite, null for now.
+                String captionThumbnail = null;
+                String copyrightThumbnail = null;
+                String uriPhoto = null;
+                byte[] photo = null;    // Stores a blob when marked as favorite, null for now.
+                String captionPhoto = null;
+                String copyrightPhoto = null;
+
+                // Check if multimedia exists and is in json array format.
+                if(jsonNewsStory.has(NYT_MULTIMEDIA)
+                        && jsonNewsStory.get(NYT_MULTIMEDIA) instanceof JSONArray
+                        && jsonNewsStory.getJSONArray(NYT_MULTIMEDIA) != null) {
+                    // Get the multimedia json array.
+                    multimediaJsonArray = jsonNewsStory.getJSONArray(NYT_MULTIMEDIA);
 
                     // Traverse the multimedia json array.
                     for(int j = 0; j < multimediaJsonArray.length(); j++) {
@@ -305,69 +328,178 @@ public class NewsSyncAdapter extends AbstractThreadedSyncAdapter {
                         JSONObject jsonImage = multimediaJsonArray.getJSONObject(j);
 
                         // Get the image format.
-                        String format = jsonImage.getString(NYT_FORMAT);
+                        String format = null;
+                        if(jsonImage.has(NYT_FORMAT)
+                                && jsonImage.get(NYT_FORMAT) instanceof String
+                                && jsonImage.getString(NYT_FORMAT) != null
+                                && !jsonImage.getString(NYT_FORMAT).isEmpty()) {
+                            // Get the image format.
+                            format = jsonImage.getString(NYT_FORMAT);
+                        } else {
+                            // Image format not found, skip this image.
+                            continue;
+                        }
 
                         // Extract the image only if it's thumbnail or normal format.
                         if(format.equals(NYT_FORMAT_STANDARD_THUMBNAIL)) {
-                            uriThumbnail = jsonNewsStory.getString(NYT_URL);
-                            thumbnail = null; // Stores a blob when marked as favorite, null for now.
-                            captionThumbnail = jsonNewsStory.getString(NYT_CAPTION);
-                            copyrightThumbnail = jsonNewsStory.getString(NYT_COPYRIGHT);
+                            // Extract thumbnail uri.
+                            if(jsonImage.has(NYT_URL)
+                                    && jsonImage.get(NYT_URL) instanceof String
+                                    && jsonImage.getString(NYT_URL) != null
+                                    && !jsonImage.getString(NYT_URL).isEmpty()) {
+                                uriThumbnail = jsonImage.getString(NYT_URL);
+                            } else {
+                                // Thumbnail uri not found, skip this image.
+                                continue;
+                            }
+
+                            // Extract thumbnail caption.
+                            if(jsonImage.has(NYT_CAPTION)
+                                    && jsonImage.get(NYT_CAPTION) instanceof String
+                                    && jsonImage.getString(NYT_CAPTION) != null
+                                    && !jsonImage.getString(NYT_CAPTION).isEmpty()) {
+                                captionThumbnail = jsonImage.getString(NYT_CAPTION);
+                            }
+
+                            // Extract thumbnail copyright.
+                            if(jsonImage.has(NYT_COPYRIGHT)
+                                    && jsonImage.get(NYT_COPYRIGHT) instanceof String
+                                    && jsonImage.getString(NYT_COPYRIGHT) != null
+                                    && !jsonImage.getString(NYT_COPYRIGHT).isEmpty()) {
+                                copyrightThumbnail = jsonImage.getString(NYT_COPYRIGHT);
+                            }
                         } else if(format.equals(NYT_FORMAT_NORMAL)) {
-                            uriPhoto = jsonNewsStory.getString(NYT_URL);
-                            photo = null; // Stores a blob when marked as favorite, null for now.
-                            captionPhoto = jsonNewsStory.getString(NYT_CAPTION);
-                            copyrightPhoto = jsonNewsStory.getString(NYT_COPYRIGHT);
+                            // Extract photo uri.
+                            if(jsonImage.has(NYT_URL)
+                                    && jsonImage.get(NYT_URL) instanceof String
+                                    && jsonImage.getString(NYT_URL) != null
+                                    && !jsonImage.getString(NYT_URL).isEmpty()) {
+                                uriPhoto = jsonImage.getString(NYT_URL);
+                            } else {
+                                // Photo uri not found, skip this image.
+                                continue;
+                            }
+
+                            // Extract photo caption.
+                            if(jsonImage.has(NYT_CAPTION)
+                                    && jsonImage.get(NYT_CAPTION) instanceof String
+                                    && jsonImage.getString(NYT_CAPTION) != null
+                                    && !jsonImage.getString(NYT_CAPTION).isEmpty()) {
+                                captionPhoto = jsonImage.getString(NYT_CAPTION);
+                            }
+
+                            // Extract photo copyright.
+                            if(jsonImage.has(NYT_COPYRIGHT)
+                                    && jsonImage.get(NYT_COPYRIGHT) instanceof String
+                                    && jsonImage.getString(NYT_COPYRIGHT) != null
+                                    && !jsonImage.getString(NYT_COPYRIGHT).isEmpty()) {
+                                copyrightPhoto = jsonImage.getString(NYT_COPYRIGHT);
+                            }
                         }
                     }
-
-                    // Create content values for this news story.
-                    ContentValues newsValues = new ContentValues();
-
-                    newsValues.put(NewsContract.NewsEntry.COLUMN_HEADLINE, headline);
-                    newsValues.put(NewsContract.NewsEntry.COLUMN_SUMMARY, summary);
-                    newsValues.put(NewsContract.NewsEntry.COLUMN_URI_STORY, uriStory);
-                    newsValues.put(NewsContract.NewsEntry.COLUMN_AUTHOR, author);
-                    newsValues.put(NewsContract.NewsEntry.COLUMN_DATE, date);
-                    newsValues.put(NewsContract.NewsEntry.COLUMN_URI_THUMBNAIL, uriThumbnail);
-                    newsValues.put(NewsContract.NewsEntry.COLUMN_THUMBNAIL, thumbnail);
-                    newsValues.put(NewsContract.NewsEntry.COLUMN_CAPTION_THUMBNAIL, captionThumbnail);
-                    newsValues.put(NewsContract.NewsEntry.COLUMN_COPYRIGHT_THUMBNAIL, copyrightThumbnail);
-                    newsValues.put(NewsContract.NewsEntry.COLUMN_URI_PHOTO, uriPhoto);
-                    newsValues.put(NewsContract.NewsEntry.COLUMN_PHOTO, photo);
-                    newsValues.put(NewsContract.NewsEntry.COLUMN_CAPTION_PHOTO, captionPhoto);
-                    newsValues.put(NewsContract.NewsEntry.COLUMN_COPYRIGHT_PHOTO, copyrightPhoto);
-                    newsValues.put(NewsContract.NewsEntry.COLUMN_IS_FAVORITE, isFavorite);
-
-                    // Add the content values into the vector.
-                    vectorContentValues.add(newsValues);
+                } else {
+                    // No thumbnail or photo found, skip this story.
+                    continue;
                 }
 
-                // Add the news stories into the database.
-                if(vectorContentValues.size() > 0) {
-                    // Copy the vector values into content values array.
-                    ContentValues[] arrayContentValues = new ContentValues[vectorContentValues.size()];
-                    vectorContentValues.toArray(arrayContentValues);
-
-                    // Delete the older data before inserting, except those marked as favorite.
-                    getContext().getContentResolver()
-                            .delete(NewsContract.NewsEntry.CONTENT_URI,
-                                    NewsContract.NewsEntry.COLUMN_IS_FAVORITE + " == ?",
-                                    new String[]{Integer.toString(0)});
-
-                    // Bulk insert into news table.
-                    getContext().getContentResolver()
-                            .bulkInsert(NewsContract.NewsEntry.CONTENT_URI, arrayContentValues);
+                // Extract the summary from the JSON object.
+                String summary = null;
+                if(jsonNewsStory.has(NYT_ABSTRACT)
+                        && jsonNewsStory.get(NYT_ABSTRACT) instanceof String
+                        && !jsonNewsStory.getString(NYT_ABSTRACT).isEmpty()) {
+                    summary = jsonNewsStory.getString(NYT_ABSTRACT);
                 }
 
-                Log.d(LOG_TAG, "Sync Complete. " + vectorContentValues.size() + " Inserted");
-            } else {
-                // No results found in the JSON response string.
-                throw new JSONException(getContext().getString(R.string.err_zero_results));
+                // Extract the uri for the story from the JSON object.
+                String uriStory = null;
+                if(jsonNewsStory.has(NYT_URL)
+                        && jsonNewsStory.get(NYT_URL) instanceof String
+                        && !jsonNewsStory.getString(NYT_URL).isEmpty()) {
+                    uriStory = jsonNewsStory.getString(NYT_URL);
+                }
+
+                // Extract the author from the JSON object.
+                String author = null;
+                if(jsonNewsStory.has(NYT_BYLINE)
+                        && jsonNewsStory.get(NYT_BYLINE) instanceof String
+                        && !jsonNewsStory.getString(NYT_BYLINE).isEmpty()) {
+                    author = jsonNewsStory.getString(NYT_BYLINE);
+                }
+
+                // Extract the date from the JSON object.
+                String date = null;
+                if(jsonNewsStory.has(NYT_PUBLISHED_DATE)
+                        && jsonNewsStory.get(NYT_PUBLISHED_DATE) instanceof String
+                        && !jsonNewsStory.getString(NYT_PUBLISHED_DATE).isEmpty()) {
+                    date = jsonNewsStory.getString(NYT_PUBLISHED_DATE);
+                }
+
+                // Marked as favorite, false for now.
+                int isFavorite = 0;
+
+                // Create content values for this news story.
+                ContentValues newsValues = new ContentValues();
+
+                newsValues.put(NewsContract.NewsEntry.COLUMN_HEADLINE, headline);
+                newsValues.put(NewsContract.NewsEntry.COLUMN_SUMMARY, summary);
+                newsValues.put(NewsContract.NewsEntry.COLUMN_URI_STORY, uriStory);
+                newsValues.put(NewsContract.NewsEntry.COLUMN_AUTHOR, author);
+                newsValues.put(NewsContract.NewsEntry.COLUMN_DATE, date);
+                newsValues.put(NewsContract.NewsEntry.COLUMN_URI_THUMBNAIL, uriThumbnail);
+                newsValues.put(NewsContract.NewsEntry.COLUMN_THUMBNAIL, thumbnail);
+                newsValues.put(NewsContract.NewsEntry.COLUMN_CAPTION_THUMBNAIL, captionThumbnail);
+                newsValues.put(NewsContract.NewsEntry.COLUMN_COPYRIGHT_THUMBNAIL, copyrightThumbnail);
+                newsValues.put(NewsContract.NewsEntry.COLUMN_URI_PHOTO, uriPhoto);
+                newsValues.put(NewsContract.NewsEntry.COLUMN_PHOTO, photo);
+                newsValues.put(NewsContract.NewsEntry.COLUMN_CAPTION_PHOTO, captionPhoto);
+                newsValues.put(NewsContract.NewsEntry.COLUMN_COPYRIGHT_PHOTO, copyrightPhoto);
+                newsValues.put(NewsContract.NewsEntry.COLUMN_IS_FAVORITE, isFavorite);
+
+                // Add the content values into the vector.
+                vectorContentValues.add(newsValues);
             }
+
+            // Check rows inserted and deleted.
+            int rowsInserted = 0;
+            int rowsDeleted = 0;
+
+            // Add the news stories into the database.
+            if(vectorContentValues.size() > 0) {
+                // Copy the vector values into content values array.
+                ContentValues[] arrayContentValues = new ContentValues[vectorContentValues.size()];
+                vectorContentValues.toArray(arrayContentValues);
+
+                // Delete the older data before inserting, except those marked as favorite.
+                rowsDeleted = getContext().getContentResolver()
+                        .delete(NewsContract.NewsEntry.CONTENT_URI,
+                                NewsContract.NewsEntry.COLUMN_IS_FAVORITE + "=?",
+                                new String[]{Integer.toString(0)});
+
+                // Bulk insert into news table.
+                rowsInserted = getContext().getContentResolver()
+                        .bulkInsert(NewsContract.NewsEntry.CONTENT_URI, arrayContentValues);
+            }
+
+            Log.d(LOG_TAG, "Sync Complete");
+            Log.d(LOG_TAG, "Rows deleted: " + rowsDeleted);
+            Log.d(LOG_TAG, "Rows inserted: " + rowsInserted);
+
         } catch (JSONException e) {
             Log.e(LOG_TAG, e.getMessage(), e);
             e.printStackTrace();
         }
+    }
+
+    private static void onAccountCreated(Account newAccount, Context context) {
+        Log.d(LOG_TAG, "onAccountCreated");
+
+        // Configure the sync.
+        NewsSyncAdapter.configurePeriodicSync(context, SYNC_INTERVAL, SYNC_FLEXTIME);
+
+        // Enable periodic sync.
+        ContentResolver.setSyncAutomatically(newAccount, context.getString(R.string.content_authority), true);
+
+        // Trigger an immediate sync to get the ball rolling!
+        syncImmediately(context);
     }
 }

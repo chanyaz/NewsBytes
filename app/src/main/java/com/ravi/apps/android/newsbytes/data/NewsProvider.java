@@ -125,16 +125,13 @@ public class NewsProvider extends ContentProvider {
 
         switch (uriMatch) {
             case NEWS: {
-                // Insert values into movie table.
+                // Insert values into news table.
                 long id = writeDb.insert(NewsEntry.TABLE_NAME, null, values);
 
                 // Check if insert was successful.
                 if (id > 0) {
                     resultUri = NewsEntry.buildNewsUri(id);
                 } else {
-                    // Close the db.
-                    writeDb.close();
-
                     // Throw sql exception.
                     throw new android.database.SQLException(getContext()
                             .getString(R.string.err_insert_failed) + uri);
@@ -143,9 +140,6 @@ public class NewsProvider extends ContentProvider {
                 break;
             }
             default: {
-                // Close the db.
-                writeDb.close();
-
                 // Throw unsupported operation exception.
                 throw new UnsupportedOperationException(getContext()
                         .getString(R.string.msg_err_unknown_uri) + uri);
@@ -154,9 +148,6 @@ public class NewsProvider extends ContentProvider {
 
         // Notify any observers of the change.
         getContext().getContentResolver().notifyChange(uri, null);
-
-        // Close the db.
-        writeDb.close();
 
         return resultUri;
     }
@@ -196,9 +187,6 @@ public class NewsProvider extends ContentProvider {
                 // Notify observers of change.
                 getContext().getContentResolver().notifyChange(uri, null);
 
-                // Close the db.
-                writeDb.close();
-
                 return insertCount;
             }
             default: {
@@ -220,7 +208,7 @@ public class NewsProvider extends ContentProvider {
 
         switch (uriMatch) {
             case NEWS: {
-                // Update values in movie table.
+                // Update values in news table.
                 rowsUpdated = writeDb.update(NewsEntry.TABLE_NAME, values, selection, selectionArgs);
                 break;
             }
@@ -233,9 +221,6 @@ public class NewsProvider extends ContentProvider {
         // Notify any observers only if any updates were made.
         if (rowsUpdated != 0)
             getContext().getContentResolver().notifyChange(uri, null);
-
-        // Close the db.
-        writeDb.close();
 
         return rowsUpdated;
     }
@@ -255,7 +240,7 @@ public class NewsProvider extends ContentProvider {
 
         switch (uriMatch) {
             case NEWS: {
-                // Delete from movie table.
+                // Delete from news table.
                 rowsDeleted = writeDb.delete(NewsEntry.TABLE_NAME, selection, selectionArgs);
                 break;
             }
@@ -268,9 +253,6 @@ public class NewsProvider extends ContentProvider {
         // Notify any observers only if any deletions were made.
         if (rowsDeleted != 0)
             getContext().getContentResolver().notifyChange(uri, null);
-
-        // Close the db.
-        writeDb.close();
 
         return rowsDeleted;
     }

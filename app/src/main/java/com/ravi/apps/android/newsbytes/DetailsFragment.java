@@ -16,16 +16,19 @@
 
 package com.ravi.apps.android.newsbytes;
 
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 /**
- * A placeholder fragment containing a simple view.
+ * Displays detailed information about the news story.
  */
 public class DetailsFragment extends Fragment {
+
+    // Key used to get the news parcelable from bundle.
+    public static final String NEWS_DETAILS = "News Details";
 
     public DetailsFragment() {
     }

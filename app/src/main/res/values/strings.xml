@@ -43,6 +43,8 @@
 
     <!-- Unknown uri error message -->
     <string name="msg_err_unknown_uri">Unknown URI: </string>
+    <!-- Query returned zero results -->
+    <string name="msg_err_zero_results">Query returned zero results</string>
 
 
     <!-- Exception when application is unable to connect to the host -->

@@ -25,11 +25,8 @@ import android.preference.PreferenceManager;
  */
 public class Utility {
     /**
-     * Returns a String object containing the current news category preference
+     * Returns a string containing the current news category preference
      * retrieved from the shared preferences.
-     *
-     * @param context the application context
-     * @return        the current news category preference
      */
     public static String getNewsCategoryPreference(Context context) {
         // Get shared preferences.
@@ -43,5 +40,23 @@ public class Utility {
         String newsCategoryValue = sharedPreferences.getString(newsCategoryKey, newsCategoryDefault);
 
         return newsCategoryValue;
+    }
+
+    /**
+     * Returns a string after removing all occurrences of a specific string
+     * from the source string.
+     */
+    public static String removeCharsFromString(String source, String remove) {
+        // Create a string builder to hold the result string.
+        StringBuilder result = new StringBuilder();
+
+        // Convert source string into char array and iterate through it.
+        for(char c : source.toCharArray()) {
+            if(remove.indexOf(c) == -1) {
+                result.append(c);
+            }
+        }
+
+        return result.toString();
     }
 }
