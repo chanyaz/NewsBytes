@@ -100,7 +100,7 @@ public class HeadlinesFragment extends Fragment
     private String mNewsCategoryPreference;
 
     // Position of selected item or first visible item in the list view.
-    private int mListPosition;
+    private int mListPosition = ListView.INVALID_POSITION;
 
     public HeadlinesFragment() {
     }
@@ -160,6 +160,45 @@ public class HeadlinesFragment extends Fragment
 
         // Initialize the news cursor loader.
         getLoaderManager().initLoader(NEWS_LOADER, null, this);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // Check if the news category preference has changed.
+        if(!mNewsCategoryPreference.equals(Utility.getNewsCategoryPreference(getActivity()))) {
+            // Update the news category from the shared preferences.
+            mNewsCategoryPreference = Utility.getNewsCategoryPreference(getActivity());
+
+            // Reset the list position index.
+            mListPosition = 0;
+
+            // Display status message in empty list view.
+            mEmptyListView.setText(getString(R.string.msg_status_loading));
+
+            // Reset the news loader.
+            onLoaderReset(null);
+
+            // Restart the news loader.
+            getLoaderManager().restartLoader(NEWS_LOADER, null, this);
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        // Save the current news category preference.
+        outState.putString(getString(R.string.pref_news_category_key), mNewsCategoryPreference);
+
+        // Get the first visible list position and save it in the grid index.
+        mListPosition = mListView.getFirstVisiblePosition();
+
+        // Save the grid index.
+        if(mListPosition != mListView.INVALID_POSITION) {
+            outState.putInt(LIST_POSITION_KEY, mListPosition);
+        }
+
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -241,6 +280,28 @@ public class HeadlinesFragment extends Fragment
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Log.d(LOG_TAG, "onItemClick");
 
+        // Get the cursor at the click position.
+        Cursor newsCursor = (Cursor) parent.getItemAtPosition(position);
+
+        // Create the news object to pass back to the parent activity.
+        News news = new News(
+                newsCursor.getString(COL_HEADLINE),
+                newsCursor.getString(COL_SUMMARY),
+                newsCursor.getString(COL_URI_STORY),
+                newsCursor.getString(COL_AUTHOR),
+                newsCursor.getString(COL_DATE),
+                newsCursor.getString(COL_URI_THUMBNAIL),
+                newsCursor.getBlob(COL_THUMBNAIL),
+                newsCursor.getString(COL_CAPTION_THUMBNAIL),
+                newsCursor.getString(COL_COPYRIGHT_THUMBNAIL),
+                newsCursor.getString(COL_URI_PHOTO),
+                newsCursor.getBlob(COL_PHOTO),
+                newsCursor.getString(COL_CAPTION_PHOTO),
+                newsCursor.getString(COL_COPYRIGHT_PHOTO),
+                newsCursor.getInt(COL_IS_FAVORITE));
+
+        // Notify the parent activity that the user clicked a headline and pass on the news details.
+        ((OnHeadlineSelectedListener) getActivity()).onHeadlineSelected(news);
     }
 
     /**

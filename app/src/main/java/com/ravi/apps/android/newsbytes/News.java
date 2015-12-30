@@ -32,11 +32,11 @@ public class News implements Parcelable {
     private final String mAuthor;
     private final String mDate;
     private final String mUriThumbnail;
-    private final byte[] mThumbnail;
+    private byte[] mThumbnail;
     private final String mCaptionThumbnail;
     private final String mCopyrightThumbnail;
     private final String mUriPhoto;
-    private final byte[] mPhoto;
+    private byte[] mPhoto;
     private final String mCaptionPhoto;
     private final String mCopyrightPhoto;
     private final int mIsFavorite;
@@ -201,6 +201,16 @@ public class News implements Parcelable {
     // Returns whether story is marked as favorite.
     public int getIsFavorite() {
         return mIsFavorite;
+    }
+
+    // Sets the thumbnail as a byte array.
+    public void setThumbnailByteArray(byte[] thumbnail) {
+        mThumbnail = thumbnail;
+    }
+
+    // Sets the photo as a byte array.
+    public void setPhotoByteArray(byte[] photo) {
+        mPhoto = photo;
     }
 }
 

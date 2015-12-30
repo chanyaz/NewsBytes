@@ -27,8 +27,23 @@ public class DetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
-    }
 
+        if (savedInstanceState == null) {
+            // Extract extras from intent.
+            Bundle bundle = getIntent().getExtras();
+
+            // Create the details fragment object.
+            DetailsFragment detailsFragment = new DetailsFragment();
+
+            // Set arguments containing news details.
+            detailsFragment.setArguments(bundle);
+
+            // Add the fragment onto the container.
+            getFragmentManager().beginTransaction()
+                    .add(R.id.news_details_container, detailsFragment)
+                    .commit();
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
