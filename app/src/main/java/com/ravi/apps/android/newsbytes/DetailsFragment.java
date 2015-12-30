@@ -17,9 +17,13 @@
 package com.ravi.apps.android.newsbytes;
 
 import android.app.Fragment;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +39,10 @@ import java.io.ByteArrayOutputStream;
 /**
  * Displays detailed information about the news story.
  */
-public class DetailsFragment extends Fragment {
+public class DetailsFragment extends Fragment implements View.OnClickListener {
+
+    // Tag for logging messages.
+    public static final String LOG_TAG = HeadlinesFragment.class.getSimpleName();
 
     // Key used to get the news parcelable from bundle.
     public static final String NEWS_DETAILS = "News Details";
@@ -79,12 +86,49 @@ public class DetailsFragment extends Fragment {
         bindDataToView();
 
         // Set the mark as favorite button click listener.
-//        mMarkAsFav.setOnClickListener(this);
+        mMarkAsFav.setOnClickListener(this);
 
         // Set the read more button click listener.
-//        mReadMore.setOnClickListener(this);
+        mReadMore.setOnClickListener(this);
 
         return rootView;
+    }
+
+    @Override
+    public void onClick(View v) {
+        // Determine which view was clicked and proceed accordingly.
+        switch(v.getId()) {
+            case R.id.mark_favorite_button: {
+                Log.d(LOG_TAG, "Mark as fav button clicked");
+                break;
+            }
+            case R.id.read_more_button: {
+                Log.d(LOG_TAG, "Read more button clicked");
+
+                // Check if news story uri is valid.
+                if (mNews.getUriStory() != null && !mNews.getUriStory().isEmpty()) {
+                    // Create implicit intent to view full news story.
+                    Intent newsIntent = new Intent();
+
+                    // Set the intent action and data.
+                    newsIntent.setAction(Intent.ACTION_VIEW)
+                            .setData(Uri.parse(Utility
+                                    .removeCharsFromString(mNews.getUriStory(), "\\")));
+
+                    // Check if at least one app exists on the device that can handle this intent.
+                    if (getActivity().getPackageManager().queryIntentActivities
+                            (newsIntent, PackageManager.MATCH_DEFAULT_ONLY).size() > 0) {
+                        // Pass intent to view full news story.
+                        startActivity(newsIntent);
+                    } else {
+                        // TODO: Display error message.
+                    }
+                } else {
+                    // TODO: Display error message.
+                }
+                break;
+            }
+        }
     }
 
     /**
