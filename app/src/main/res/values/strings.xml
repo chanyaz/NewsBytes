@@ -29,6 +29,21 @@
     <!-- News category preference : Favorites -->
     <string name="pref_news_category_favorites">6</string>
 
+    <!-- Label for news category : World -->
+    <string name="label_news_category_world">World</string>
+    <!-- Label for news category : Business -->
+    <string name="label_news_category_business">Business</string>
+    <!-- Label for news category : Technology -->
+    <string name="label_news_category_technology">Technology</string>
+    <!-- Label for news category : Health -->
+    <string name="label_news_category_health">Health</string>
+    <!-- Label for news category : Travel -->
+    <string name="label_news_category_travel">Travel</string>
+    <!-- Label for news category : Sports -->
+    <string name="label_news_category_sports">Sports</string>
+    <!-- Label for news category : Favorites -->
+    <string name="label_news_category_favorites">Favorites</string>
+
     <!-- Sync adapter related -->
     <string name="sync_account_type">newsbytes.android.apps.ravi.com</string>
     <string name="content_authority">com.ravi.apps.android.newsbytes</string>

@@ -21,16 +21,21 @@ import android.app.LoaderManager;
 import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.ravi.apps.android.newsbytes.data.NewsContract.NewsEntry;
+
+import java.io.ByteArrayOutputStream;
 
 /**
  * Displays a list of news story headlines and thumbnails retrieved from the New York Times server.
@@ -280,6 +285,18 @@ public class HeadlinesFragment extends Fragment
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Log.d(LOG_TAG, "onItemClick");
 
+        // Get the thumbnail image view to extract bitmap for saving into news object.
+        ImageView thumbnail = (ImageView) view.findViewById(R.id.thumbnail_imageview);
+
+        // Extract bitmap from thumbnail image view and convert it to byte array.
+        Bitmap bitmap = ((BitmapDrawable)thumbnail.getDrawable()).getBitmap();
+        byte[] thumbnailByteArray = null;
+        if(bitmap != null) {
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            thumbnailByteArray = stream.toByteArray();
+        }
+
         // Get the cursor at the click position.
         Cursor newsCursor = (Cursor) parent.getItemAtPosition(position);
 
@@ -291,7 +308,7 @@ public class HeadlinesFragment extends Fragment
                 newsCursor.getString(COL_AUTHOR),
                 newsCursor.getString(COL_DATE),
                 newsCursor.getString(COL_URI_THUMBNAIL),
-                newsCursor.getBlob(COL_THUMBNAIL),
+                thumbnailByteArray,
                 newsCursor.getString(COL_CAPTION_THUMBNAIL),
                 newsCursor.getString(COL_COPYRIGHT_THUMBNAIL),
                 newsCursor.getString(COL_URI_PHOTO),

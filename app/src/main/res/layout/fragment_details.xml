@@ -9,15 +9,14 @@
         android:layout_gravity="left"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:orientation="vertical">
 
         <!-- Photo -->
         <ImageView
             android:id="@+id/photo_imageview"
             android:layout_width="match_parent"
-            android:layout_height="160dp"
-            android:scaleType="centerCrop"/>
+            android:layout_height="210dp"
+            android:scaleType="fitXY"/>
 
         <!-- Caption -->
         <TextView
@@ -25,7 +24,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-condensed"
-            android:textSize="12sp"/>
+            android:textSize="12sp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="4dp"/>
 
         <!-- Headline -->
         <TextView
@@ -33,7 +35,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-condensed"
-            android:textSize="18sp"/>
+            android:textSize="18sp"
+            android:padding="16dp"/>
 
         <!-- Author -->
         <TextView
@@ -41,7 +44,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-condensed"
-            android:textSize="12sp"/>
+            android:textSize="12sp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"/>
 
         <!-- Date -->
         <TextView
@@ -49,7 +54,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-condensed"
-            android:textSize="12sp"/>
+            android:textSize="12sp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="4dp"/>
 
         <!-- Summary -->
         <TextView
@@ -57,13 +65,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-condensed"
-            android:textSize="14sp"/>
+            android:textSize="14sp"
+            android:padding="16dp"/>
 
         <!-- Mark As Favorite and Read More -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingBottom="16dp">
 
             <!-- Mark As Favorite -->
             <Button

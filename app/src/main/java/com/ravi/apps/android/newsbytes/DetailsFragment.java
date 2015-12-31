@@ -20,6 +20,7 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -45,7 +46,13 @@ public class DetailsFragment extends Fragment implements View.OnClickListener {
     public static final String LOG_TAG = HeadlinesFragment.class.getSimpleName();
 
     // Key used to get the news parcelable from bundle.
-    public static final String NEWS_DETAILS = "News Details";
+    public static final String NEWS_DETAILS = "news_details";
+
+    // Key used to pass the favorite news story data to the intent service.
+    public static final String NEWS_FAVORITE = "news_favorite";
+
+    // Key used to save news story object upon configuration change.
+    public static final String NEWS_KEY = "news_key";
 
     // News object containing the details about this news story.
     private News mNews;
@@ -79,11 +86,16 @@ public class DetailsFragment extends Fragment implements View.OnClickListener {
             mNews = (News) arguments.getParcelable(NEWS_DETAILS);
         }
 
+        // Check if it was a configuration change.
+        if(savedInstanceState != null) {
+            // Retrieve the saved news story object.
+            if(savedInstanceState.containsKey(NEWS_KEY)) {
+                mNews = savedInstanceState.getParcelable(NEWS_KEY);
+            }
+        }
+
         // Set references for all the views.
         setReferencesToViews(rootView);
-
-        // Bind data to all the views.
-        bindDataToView();
 
         // Set the mark as favorite button click listener.
         mMarkAsFav.setOnClickListener(this);
@@ -91,7 +103,18 @@ public class DetailsFragment extends Fragment implements View.OnClickListener {
         // Set the read more button click listener.
         mReadMore.setOnClickListener(this);
 
+        // Bind data to all the views.
+        bindDataToView();
+
         return rootView;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        // Save the news story object in the bundle.
+        outState.putParcelable(NEWS_KEY, mNews);
+
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -100,6 +123,20 @@ public class DetailsFragment extends Fragment implements View.OnClickListener {
         switch(v.getId()) {
             case R.id.mark_favorite_button: {
                 Log.d(LOG_TAG, "Mark as fav button clicked");
+
+                // Disable mark as favorite button.
+                mMarkAsFav.setEnabled(false);
+
+                // Set the news story as favorite.
+                mNews.setIsFavorite(1);
+
+                // Create intent to add news story into database.
+                Intent intent = new Intent(getActivity(), AddFavoriteService.class);
+                intent.putExtra(NEWS_FAVORITE, mNews);
+
+                // Send intent to start add favorite intent service.
+                getActivity().startService(intent);
+
                 break;
             }
             case R.id.read_more_button: {
@@ -126,6 +163,7 @@ public class DetailsFragment extends Fragment implements View.OnClickListener {
                 } else {
                     // TODO: Display error message.
                 }
+
                 break;
             }
         }
@@ -177,13 +215,35 @@ public class DetailsFragment extends Fragment implements View.OnClickListener {
      * Binds the data to the corresponding views.
      */
     private void bindDataToView() {
-        // Load the photo using Picasso.
-        if(mNews.getUriPhoto() != null) {
-            Picasso.with(getActivity())
-                    .load(mNews.getUriPhoto())
-                    .into(mPicassoTarget);
+        // Set the title to reflect the current news category.
+        getActivity().setTitle(Utility.getNewsCategoryLabel(getActivity()));
+
+        // Load photo into image view. If this is a favorite story,
+        // then load from byte array else use Picasso.
+        if(mNews.getIsFavorite() == 1) {
+            // Get the photo byte array from the news object.
+            byte[] photoByteStream = mNews.getPhoto();
+
+            // Check if byte array for photo is non null.
+            if(photoByteStream != null) {
+                // Get the photo bitmap from byte array.
+                Bitmap photoBitmap = BitmapFactory.decodeByteArray(photoByteStream, 0, photoByteStream.length);
+
+                // Set the photo bitmap into the image view.
+                mPhoto.setImageBitmap(photoBitmap);
+                mPhoto.setScaleType(ImageView.ScaleType.FIT_XY);
+            } else {
+                // TODO: Set appropriate error meassage.
+            }
         } else {
-            // TODO: Set appropriate error meassage.
+            // Load the photo using Picasso.
+            if(mNews.getUriPhoto() != null) {
+                Picasso.with(getActivity())
+                        .load(mNews.getUriPhoto())
+                        .into(mPicassoTarget);
+            } else {
+                // TODO: Set appropriate error meassage.
+            }
         }
 
         // Set the caption.
@@ -204,22 +264,26 @@ public class DetailsFragment extends Fragment implements View.OnClickListener {
         if(mNews.getAuthor() != null && !mNews.getAuthor().isEmpty()) {
             mAuthor.setText(mNews.getAuthor());
         } else {
-            // TODO: Set appropriate error meassage.
+            // TODO: Set appropriate error message.
         }
 
         // Set the date.
         if(mNews.getDate() != null && !mNews.getDate().isEmpty()) {
             mDate.setText(mNews.getDate());
         } else {
-            // TODO: Set appropriate error meassage.
+            // TODO: Set appropriate error message.
         }
 
         // Set the summary.
         if(mNews.getSummary() != null && !mNews.getSummary().isEmpty()) {
             mSummary.setText(mNews.getSummary());
         } else {
-            // TODO: Set appropriate error meassage.
+            // TODO: Set appropriate error message.
         }
 
+        // Disable mark as favorite button if this is a favorite story.
+        if(mNews.getIsFavorite() == 1) {
+            mMarkAsFav.setEnabled(false);
+        }
     }
 }

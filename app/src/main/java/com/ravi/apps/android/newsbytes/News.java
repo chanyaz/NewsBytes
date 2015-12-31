@@ -39,7 +39,7 @@ public class News implements Parcelable {
     private byte[] mPhoto;
     private final String mCaptionPhoto;
     private final String mCopyrightPhoto;
-    private final int mIsFavorite;
+    private int mIsFavorite;
 
     // Public constructor.
     public News(String headline, String summary, String uriStory, String author, String date,
@@ -211,6 +211,11 @@ public class News implements Parcelable {
     // Sets the photo as a byte array.
     public void setPhotoByteArray(byte[] photo) {
         mPhoto = photo;
+    }
+
+    // Sets whether news story is marked as favorite.
+    public void setIsFavorite(int isFavorite) {
+        mIsFavorite = isFavorite;
     }
 }
 

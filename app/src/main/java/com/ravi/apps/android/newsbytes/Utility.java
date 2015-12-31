@@ -43,6 +43,42 @@ public class Utility {
     }
 
     /**
+     * Returns the appropriate label for the current news category preference
+     * retrieved from the shared preferences.
+     */
+    public static String getNewsCategoryLabel(Context context) {
+        // Get shared preferences.
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+
+        // Get the news category key and default value from resources.
+        String newsCategoryKey = context.getString(R.string.pref_news_category_key);
+        String newsCategoryDefault = context.getString(R.string.pref_news_category_world);
+
+        // Retrieve the news category value from shared preferences.
+        String newsCategoryValue = sharedPreferences.getString(newsCategoryKey, newsCategoryDefault);
+
+        // Get the appropriate label for the current news category.
+        String newsCategoryLabel = null;
+        if(newsCategoryValue.equals(context.getString(R.string.pref_news_category_world))) {
+            newsCategoryLabel = context.getString(R.string.label_news_category_world);
+        } else if(newsCategoryValue.equals(context.getString(R.string.pref_news_category_business))) {
+            newsCategoryLabel = context.getString(R.string.label_news_category_business);
+        } else if(newsCategoryValue.equals(context.getString(R.string.pref_news_category_technology))) {
+            newsCategoryLabel = context.getString(R.string.label_news_category_technology);
+        } else if(newsCategoryValue.equals(context.getString(R.string.pref_news_category_health))) {
+            newsCategoryLabel = context.getString(R.string.label_news_category_health);
+        } else if(newsCategoryValue.equals(context.getString(R.string.pref_news_category_travel))) {
+            newsCategoryLabel = context.getString(R.string.label_news_category_travel);
+        } else if(newsCategoryValue.equals(context.getString(R.string.pref_news_category_sports))) {
+            newsCategoryLabel = context.getString(R.string.label_news_category_sports);
+        } else if(newsCategoryValue.equals(context.getString(R.string.pref_news_category_favorites))) {
+            newsCategoryLabel = context.getString(R.string.label_news_category_favorites);
+        }
+
+        return newsCategoryLabel;
+    }
+
+    /**
      * Returns a string after removing all occurrences of a specific string
      * from the source string.
      */

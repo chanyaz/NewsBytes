@@ -3,13 +3,13 @@
 
     <!-- User visible news category options -->
     <string-array name="pref_news_category_entries">
-        <item>World</item>
-        <item>Business</item>
-        <item>Technology</item>
-        <item>Health</item>
-        <item>Travel</item>
-        <item>Sports</item>
-        <item>Favorites</item>
+        <item>@string/label_news_category_world</item>
+        <item>@string/label_news_category_business</item>
+        <item>@string/label_news_category_technology</item>
+        <item>@string/label_news_category_health</item>
+        <item>@string/label_news_category_travel</item>
+        <item>@string/label_news_category_sports</item>
+        <item>@string/label_news_category_favorites</item>
     </string-array>
 
     <!-- Values for the news category options -->

@@ -64,6 +64,10 @@
                 android:name="android.content.SyncAdapter"
                 android:resource="@xml/syncadapter" />
         </service>
+        <!-- Intent service to add favorite news story into content provider -->
+        <service
+            android:name=".AddFavoriteService">
+        </service>
     </application>
 
 </manifest>
