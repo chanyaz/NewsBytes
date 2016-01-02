@@ -22,8 +22,6 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 
-import com.ravi.apps.android.newsbytes.sync.NewsSyncAdapter;
-
 /**
  * Enables users to view and change the app settings.
  */
@@ -65,11 +63,6 @@ public class SettingsFragment extends PreferenceFragment
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         // Display the current user preference for news category.
         updatePreferenceSummary(findPreference(key));
-
-        // Trigger an immediate sync if the current preference is anything other than favorites.
-        if(!findPreference(key).equals(getString(R.string.pref_news_category_favorites))) {
-            NewsSyncAdapter.syncImmediately(getActivity());
-        }
     }
 
     /**

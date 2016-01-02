@@ -43,7 +43,10 @@ import java.io.ByteArrayOutputStream;
 public class DetailsFragment extends Fragment implements View.OnClickListener {
 
     // Tag for logging messages.
-    public static final String LOG_TAG = HeadlinesFragment.class.getSimpleName();
+    private static final String LOG_TAG = HeadlinesFragment.class.getSimpleName();
+
+    // Tag used to identify this fragment.
+    public static final String DETAILS_FRAGMENT_TAG = "details_fragment_tag";
 
     // Key used to get the news parcelable from bundle.
     public static final String NEWS_DETAILS = "news_details";
@@ -67,8 +70,11 @@ public class DetailsFragment extends Fragment implements View.OnClickListener {
     private Button mMarkAsFav;
     private Button mReadMore;
 
-    // Reference to load target for picasso.
-    private PicassoTarget mPicassoTarget = new PicassoTarget();
+    // Reference to thumbnail target for picasso.
+    private ThumbnailTarget mThumbnailTarget = new ThumbnailTarget();
+
+    // Reference to photo target for picasso.
+    private PhotoTarget mPhotoTarget = new PhotoTarget();
 
     public DetailsFragment() {
     }
@@ -170,10 +176,35 @@ public class DetailsFragment extends Fragment implements View.OnClickListener {
     }
 
     /**
+     * Provides target for Picasso that loads the thumbnail image from the url
+     * and extracts and stores the thumbnail image byte array.
+     */
+    private final class ThumbnailTarget implements Target {
+
+        @Override
+        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+            // Get byte array from thumbnail bitmap.
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+
+            // Set the thumbnail byte array in the news object.
+            mNews.setThumbnailByteArray(stream.toByteArray());
+        }
+
+        @Override
+        public void onPrepareLoad(Drawable placeHolderDrawable) {
+        }
+
+        @Override
+        public void onBitmapFailed(Drawable errorDrawable) {
+        }
+    }
+
+    /**
      * Provides target for Picasso that loads the photo image from the url
      * and extracts and stores the photo image byte array.
      */
-    private final class PicassoTarget implements Target {
+    private final class PhotoTarget implements Target {
 
         @Override
         public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
@@ -186,6 +217,11 @@ public class DetailsFragment extends Fragment implements View.OnClickListener {
 
             // Set the photo byte array in the news object.
             mNews.setPhotoByteArray(stream.toByteArray());
+
+            // Now enable the mark as favorite button if this is not a favorite story.
+            if(mNews.getIsFavorite() == 0) {
+                mMarkAsFav.setEnabled(true);
+            }
         }
 
         @Override
@@ -236,13 +272,26 @@ public class DetailsFragment extends Fragment implements View.OnClickListener {
                 // TODO: Set appropriate error meassage.
             }
         } else {
-            // Load the photo using Picasso.
+            // Load the photo using picasso.
             if(mNews.getUriPhoto() != null) {
                 Picasso.with(getActivity())
                         .load(mNews.getUriPhoto())
-                        .into(mPicassoTarget);
+                        .into(mPhotoTarget);
             } else {
                 // TODO: Set appropriate error meassage.
+            }
+        }
+
+        // Check if it's not a favorite and the thumbnail byte array was generated in the
+        // headlines screen. If not, use picasso to get the bitmap and generate thumbnail byte
+        // array and then store it in the news object. It will be required if the user
+        // chooses to mark this as favorite.
+        if(mNews.getIsFavorite() == 0 && mNews.getThumbnail() == null) {
+            // Generate the thumbnail byte array using picasso.
+            if(mNews.getUriThumbnail() != null) {
+                Picasso.with(getActivity())
+                        .load(mNews.getUriThumbnail())
+                        .into(mThumbnailTarget);
             }
         }
 
@@ -279,11 +328,6 @@ public class DetailsFragment extends Fragment implements View.OnClickListener {
             mSummary.setText(mNews.getSummary());
         } else {
             // TODO: Set appropriate error message.
-        }
-
-        // Disable mark as favorite button if this is a favorite story.
-        if(mNews.getIsFavorite() == 1) {
-            mMarkAsFav.setEnabled(false);
         }
     }
 }

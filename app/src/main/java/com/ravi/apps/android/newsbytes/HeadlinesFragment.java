@@ -137,7 +137,7 @@ public class HeadlinesFragment extends Fragment
         mListView.setEmptyView(mEmptyListView);
 
         // Get the current news category preference from shared preferences.
-        mNewsCategoryPreference = Utility.getNewsCategoryPreference(getActivity());
+        mNewsCategoryPreference = Utility.getNewsCategoryPreference(getActivity(), null);
 
         // Check if it was a configuration change.
         if(savedInstanceState != null) {
@@ -172,9 +172,9 @@ public class HeadlinesFragment extends Fragment
         super.onStart();
 
         // Check if the news category preference has changed.
-        if(!mNewsCategoryPreference.equals(Utility.getNewsCategoryPreference(getActivity()))) {
+        if(!mNewsCategoryPreference.equals(Utility.getNewsCategoryPreference(getActivity(), null))) {
             // Update the news category from the shared preferences.
-            mNewsCategoryPreference = Utility.getNewsCategoryPreference(getActivity());
+            mNewsCategoryPreference = Utility.getNewsCategoryPreference(getActivity(), null);
 
             // Reset the list position index.
             mListPosition = 0;
@@ -211,7 +211,8 @@ public class HeadlinesFragment extends Fragment
         Log.d(LOG_TAG, "onCreateLoader");
 
         // Sort order for the query.
-        final String sortOrder = NewsEntry.COLUMN_DATE + " DESC";
+        final String sortOrder = NewsEntry.COLUMN_DATE +
+                getActivity().getString(R.string.descending_sort_order);
 
         // Selection criteria and arguments.
         final String selection = NewsEntry.COLUMN_IS_FAVORITE + "=?";
@@ -226,7 +227,7 @@ public class HeadlinesFragment extends Fragment
         } else {
             Log.d(LOG_TAG, "onCreateLoader: Querying non-favs...");
 
-            // Get the news stories other favorites.
+            // Get the news stories other than favorites.
             selectionArgs = new String[]{Integer.toString(0)};
         }
 
@@ -261,6 +262,29 @@ public class HeadlinesFragment extends Fragment
             // Assign the cursor to the adapter.
             mHeadlinesAdapter.swapCursor(data);
 
+            // Check if widget list item was clicked.
+            if(MainActivity.isWidgetItemClicked) {
+                Log.d(LOG_TAG, getActivity().getString(R.string.on_load_finished_item_clicked));
+
+                // Set list position to widget item click position.
+                if(MainActivity.widgetItemClickedPosition != ListView.INVALID_POSITION) {
+                    mListPosition = MainActivity.widgetItemClickedPosition;
+                }
+
+                // Get the cursor at the click position.
+                Cursor cursor = (Cursor) mHeadlinesAdapter.getItem(mListPosition);
+
+                // Create the news object to pass back to the parent activity.
+                News news = buildNewsObject(cursor);
+
+                // Notify the parent activity that the user clicked a headline and pass on the news details.
+                ((OnHeadlineSelectedListener) getActivity()).onHeadlineSelected(news);
+
+                // Reset the widget list item clicked flag and list position.
+                MainActivity.isWidgetItemClicked = false;
+                MainActivity.widgetItemClickedPosition = ListView.INVALID_POSITION;
+            }
+
             // Move to appropriate list item position.
             if(mListPosition != ListView.INVALID_POSITION) {
                 mListView.setSelection(mListPosition);
@@ -285,37 +309,20 @@ public class HeadlinesFragment extends Fragment
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Log.d(LOG_TAG, "onItemClick");
 
-        // Get the thumbnail image view to extract bitmap for saving into news object.
-        ImageView thumbnail = (ImageView) view.findViewById(R.id.thumbnail_imageview);
-
-        // Extract bitmap from thumbnail image view and convert it to byte array.
-        Bitmap bitmap = ((BitmapDrawable)thumbnail.getDrawable()).getBitmap();
-        byte[] thumbnailByteArray = null;
-        if(bitmap != null) {
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-            thumbnailByteArray = stream.toByteArray();
-        }
-
         // Get the cursor at the click position.
         Cursor newsCursor = (Cursor) parent.getItemAtPosition(position);
 
         // Create the news object to pass back to the parent activity.
-        News news = new News(
-                newsCursor.getString(COL_HEADLINE),
-                newsCursor.getString(COL_SUMMARY),
-                newsCursor.getString(COL_URI_STORY),
-                newsCursor.getString(COL_AUTHOR),
-                newsCursor.getString(COL_DATE),
-                newsCursor.getString(COL_URI_THUMBNAIL),
-                thumbnailByteArray,
-                newsCursor.getString(COL_CAPTION_THUMBNAIL),
-                newsCursor.getString(COL_COPYRIGHT_THUMBNAIL),
-                newsCursor.getString(COL_URI_PHOTO),
-                newsCursor.getBlob(COL_PHOTO),
-                newsCursor.getString(COL_CAPTION_PHOTO),
-                newsCursor.getString(COL_COPYRIGHT_PHOTO),
-                newsCursor.getInt(COL_IS_FAVORITE));
+        News news = buildNewsObject(newsCursor);
+
+        // Get the thumbnail image view to extract bitmap for saving into news object.
+        ImageView thumbnail = (ImageView) view.findViewById(R.id.thumbnail_imageview);
+
+        // Extract bitmap from thumbnail image view and convert it to byte array.
+        byte[] thumbnailByteArray = convertToByteArray(thumbnail);
+
+        // Set the thumbnail byte array into the news object.
+        news.setThumbnailByteArray(thumbnailByteArray);
 
         // Notify the parent activity that the user clicked a headline and pass on the news details.
         ((OnHeadlineSelectedListener) getActivity()).onHeadlineSelected(news);
@@ -327,5 +334,58 @@ public class HeadlinesFragment extends Fragment
      */
     public interface OnHeadlineSelectedListener {
         void onHeadlineSelected(News news);
+    }
+
+    /**
+     * Builds and returns a news object from the cursor passed in.
+     */
+    private News buildNewsObject(Cursor cursor) {
+        // Create and return the news object by extracting the data from the cursor.
+        return new News(
+                cursor.getString(COL_HEADLINE),
+                cursor.getString(COL_SUMMARY),
+                cursor.getString(COL_URI_STORY),
+                cursor.getString(COL_AUTHOR),
+                cursor.getString(COL_DATE),
+                cursor.getString(COL_URI_THUMBNAIL),
+                cursor.getBlob(COL_THUMBNAIL),
+                cursor.getString(COL_CAPTION_THUMBNAIL),
+                cursor.getString(COL_COPYRIGHT_THUMBNAIL),
+                cursor.getString(COL_URI_PHOTO),
+                cursor.getBlob(COL_PHOTO),
+                cursor.getString(COL_CAPTION_PHOTO),
+                cursor.getString(COL_COPYRIGHT_PHOTO),
+                cursor.getInt(COL_IS_FAVORITE));
+    }
+
+    /**
+     * Converts and returns the corresponding byte array for the bitmap
+     * linked to the image view passed in.
+     */
+    private byte[] convertToByteArray(ImageView imageView) {
+        // Get bitmap from the image view.
+        Bitmap bitmap = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
+
+        // Convert bitmap into byte array.
+        byte[] thumbnailByteArray = null;
+        if(bitmap != null) {
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            thumbnailByteArray = stream.toByteArray();
+        }
+
+        return thumbnailByteArray;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(LOG_TAG, "onResumeF");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d(LOG_TAG, "onPause");
     }
 }

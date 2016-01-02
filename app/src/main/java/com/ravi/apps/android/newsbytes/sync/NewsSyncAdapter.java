@@ -177,7 +177,7 @@ public class NewsSyncAdapter extends AbstractThreadedSyncAdapter {
             String newsJsonStr = null;
 
             // Get the news category preference from shared preferences.
-            String newsCategoryPreference = Utility.getNewsCategoryPreference(getContext());
+            String newsCategoryPreference = Utility.getNewsCategoryPreference(getContext(), null);
 
             // Set the news section query param value based on preference.
             String newsCategory = null;
@@ -236,6 +236,10 @@ public class NewsSyncAdapter extends AbstractThreadedSyncAdapter {
 
             // Parse the JSON string and extract the news data.
             getNewsDataFromJson(newsJsonStr);
+
+            // Send a local broadcast informing the widget to refresh it's data.
+            Utility.sendDataUpdatedBroadcast(getContext());
+
         } catch(IOException e) {
             Log.e(LOG_TAG, "Error: loadInBackground(): " + e.getLocalizedMessage());
         } catch(JSONException e) {

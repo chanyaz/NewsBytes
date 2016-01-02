@@ -17,6 +17,7 @@
 package com.ravi.apps.android.newsbytes;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
@@ -28,12 +29,17 @@ public class Utility {
      * Returns a string containing the current news category preference
      * retrieved from the shared preferences.
      */
-    public static String getNewsCategoryPreference(Context context) {
+    public static String getNewsCategoryPreference(Context context, String key) {
         // Get shared preferences.
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 
         // Get the news category key and default value from resources.
-        String newsCategoryKey = context.getString(R.string.pref_news_category_key);
+        String newsCategoryKey = null;
+        if(key != null) {
+            newsCategoryKey = key;
+        } else {
+            newsCategoryKey = context.getString(R.string.pref_news_category_key);
+        }
         String newsCategoryDefault = context.getString(R.string.pref_news_category_world);
 
         // Retrieve the news category value from shared preferences.
@@ -76,6 +82,19 @@ public class Utility {
         }
 
         return newsCategoryLabel;
+    }
+
+    /**
+     * Sends a local broadcast notifying that the data has been updated.
+     */
+    public static void sendDataUpdatedBroadcast(Context context) {
+        // Create the intent to send only to components within the app.
+        Intent dataUpdatedIntent = new Intent()
+                .setAction(context.getString(R.string.action_data_updated))
+                .setPackage(context.getPackageName());
+
+        // Send local broadcast.
+        context.sendBroadcast(dataUpdatedIntent);
     }
 
     /**

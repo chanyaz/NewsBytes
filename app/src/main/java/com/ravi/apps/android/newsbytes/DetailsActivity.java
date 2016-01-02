@@ -38,7 +38,7 @@ public class DetailsActivity extends AppCompatActivity {
 
             // Add the fragment onto the container.
             getFragmentManager().beginTransaction()
-                    .add(R.id.news_details_container, detailsFragment)
+                    .add(R.id.news_details_container, detailsFragment, DetailsFragment.DETAILS_FRAGMENT_TAG)
                     .commit();
         }
     }

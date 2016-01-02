@@ -82,14 +82,16 @@
                 android:id="@+id/mark_favorite_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/mark_as_favorite" />
+                android:text="@string/mark_as_favorite"
+                android:enabled="false"/>
 
             <!-- Read More -->
             <Button
                 android:id="@+id/read_more_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/read_more" />
+                android:text="@string/read_more"
+                android:enabled="true"/>
 
         </LinearLayout>
 

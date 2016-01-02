@@ -2,7 +2,7 @@
     <string name="app_name">NEWS Bytes</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_details">DetailsActivity</string>
+    <string name="title_activity_details">Details</string>
     <string name="title_activity_settings">Settings</string>
 
 
@@ -55,7 +55,8 @@
 
     <!-- Status message in empty list view depicting data load operation -->
     <string name="msg_status_loading">Loading data, please wait...</string>
-
+    <!-- Message for news list unavailable in widget -->
+    <string name="msg_empty_news_list">No news available presently</string>
     <!-- Unknown uri error message -->
     <string name="msg_err_unknown_uri">Unknown URI: </string>
     <!-- Query returned zero results -->
@@ -71,6 +72,32 @@
     <!-- Exception when insert failed -->
     <string name="err_insert_failed">Failed to insert row into: </string>
 
+    <!-- Log strings -->
+    <string name="on_update">onUpdate()</string>
+    <string name="on_receive">onReceive(): </string>
+    <string name="on_create">onCreate()</string>
+    <string name="on_create_item_clicked">onCreate(): ACTION_ITEM_CLICKED</string>
+    <string name="on_create_match_id">onCreate(): Match Id: </string>
+    <string name="on_create_position">onCreate(): Position: </string>
+    <string name="on_handle_intent">onHandleIntent()</string>
+    <string name="on_destroy">onDestroy()</string>
+    <string name="on_load_finished">onLoadFinished()</string>
+    <string name="on_load_finished_item_clicked">onLoadFinished(): Widget item clicked</string>
+    <string name="on_dataset_changed">onDataSetChanged()</string>
+    <string name="get_view_at">getViewAt()</string>
+    <string name="on_get_view_factory">onGetViewFactory()</string>
+
+
+    <!-- Intent action notifying that the data has been updated -->
+    <string name="action_data_updated" translatable="false">com.ravi.apps.android.newsbytes.ACTION_DATA_UPDATED</string>
+    <!-- Intent action notifying that the collection widget item has been clicked -->
+    <string name="action_item_clicked" translatable="false">com.ravi.apps.android.newsbytes.widget.ACTION_ITEM_CLICKED</string>
+    <!-- Intent extra key to the widget list item position -->
+    <string name="extra_widget_item_position" translatable="false">com.ravi.apps.android.newsbytes.widget.EXTRA_ITEM_POSITION</string>
+    <!-- Ascending sort order for the query -->
+    <string name="ascending_sort_order" translatable="false">" ASC"</string>
+    <!-- Descending sort order for the query -->
+    <string name="descending_sort_order" translatable="false">" DESC"</string>
 
 
 

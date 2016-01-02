@@ -68,6 +68,22 @@
         <service
             android:name=".AddFavoriteService">
         </service>
+        <!-- News widget provider -->
+        <receiver
+            android:name=".widget.NewsWidgetProvider">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.ravi.apps.android.newsbytes.ACTION_DATA_UPDATED" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_news_info" />
+        </receiver>
+        <!-- News widget remote views service -->
+        <service
+            android:name=".widget.NewsWidgetRemoteViewsService"
+            android:permission="android.permission.BIND_REMOTEVIEWS"/>
     </application>
 
 </manifest>
