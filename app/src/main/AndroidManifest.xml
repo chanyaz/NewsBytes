@@ -66,7 +66,7 @@
         </service>
         <!-- Intent service to add favorite news story into content provider -->
         <service
-            android:name=".AddFavoriteService">
+            android:name=".service.AddFavoriteService">
         </service>
         <!-- News widget provider -->
         <receiver

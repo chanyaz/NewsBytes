@@ -1,102 +1,121 @@
 <!-- Displays the news story details -->
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
-        android:gravity="center_vertical"
-        android:layout_gravity="left"
-        android:layout_height="wrap_content"
+    <ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <!-- Photo -->
-        <ImageView
-            android:id="@+id/photo_imageview"
-            android:layout_width="match_parent"
-            android:layout_height="210dp"
-            android:scaleType="fitXY"/>
-
-        <!-- Caption -->
-        <TextView
-            android:id="@+id/caption_textview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-condensed"
-            android:textSize="12sp"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:paddingTop="4dp"/>
-
-        <!-- Headline -->
-        <TextView
-            android:id="@+id/headline_textview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-condensed"
-            android:textSize="18sp"
-            android:padding="16dp"/>
-
-        <!-- Author -->
-        <TextView
-            android:id="@+id/author_textview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-condensed"
-            android:textSize="12sp"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"/>
-
-        <!-- Date -->
-        <TextView
-            android:id="@+id/date_textview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-condensed"
-            android:textSize="12sp"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:paddingTop="4dp"/>
-
-        <!-- Summary -->
-        <TextView
-            android:id="@+id/summary_textview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-condensed"
-            android:textSize="14sp"
-            android:padding="16dp"/>
-
-        <!-- Mark As Favorite and Read More -->
         <LinearLayout
-            android:layout_width="match_parent"
+            android:gravity="center_vertical"
+            android:layout_gravity="left"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:paddingBottom="16dp">
+            android:layout_width="match_parent"
+            android:orientation="vertical">
 
-            <!-- Mark As Favorite -->
-            <Button
-                android:id="@+id/mark_favorite_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/mark_as_favorite"
-                android:enabled="false"/>
+            <!-- Photo -->
+            <ImageView
+                android:id="@+id/photo_imageview"
+                android:layout_width="match_parent"
+                android:layout_height="210dp"
+                android:scaleType="fitXY"/>
 
-            <!-- Read More -->
-            <Button
-                android:id="@+id/read_more_button"
-                android:layout_width="wrap_content"
+            <!-- Caption -->
+            <TextView
+                android:id="@+id/caption_textview"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/read_more"
-                android:enabled="true"/>
+                android:fontFamily="sans-serif-condensed"
+                android:textSize="12sp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="4dp"/>
+
+            <!-- Headline -->
+            <TextView
+                android:id="@+id/headline_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed"
+                android:textSize="18sp"
+                android:padding="16dp"/>
+
+            <!-- Author -->
+            <TextView
+                android:id="@+id/author_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed"
+                android:textSize="12sp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"/>
+
+            <!-- Date -->
+            <TextView
+                android:id="@+id/date_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed"
+                android:textSize="12sp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="4dp"/>
+
+            <!-- Summary -->
+            <TextView
+                android:id="@+id/summary_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed"
+                android:textSize="14sp"
+                android:padding="16dp"/>
+
+            <!-- Mark As Favorite and Read More -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingBottom="16dp">
+
+                <!-- Mark As Favorite -->
+                <Button
+                    android:id="@+id/mark_favorite_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_mark_as_favorite"
+                    android:enabled="false"/>
+
+                <!-- Read More -->
+                <Button
+                    android:id="@+id/read_more_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_read_more"
+                    android:enabled="true"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 
-        <!-- Share FAB -->
+    </ScrollView>
 
-    </LinearLayout>
+    <!-- Share FAB -->
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/share_fab"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:src="@drawable/ic_share"
+        android:layout_gravity="bottom|end"
+        app:fabSize="normal"
+        app:elevation="6dp"
+        app:pressedTranslationZ="12dp"
+        app:borderWidth="0dp"/>
 
-</ScrollView>
+</FrameLayout>
+

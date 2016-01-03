@@ -121,13 +121,23 @@ public class News implements Parcelable {
         dest.writeString(mAuthor);
         dest.writeString(mDate);
         dest.writeString(mUriThumbnail);
-        dest.writeInt(mThumbnail.length);
-        dest.writeByteArray(mThumbnail);
+        if(mThumbnail != null) {
+            dest.writeInt(mThumbnail.length);
+            dest.writeByteArray(mThumbnail);
+        } else {
+            dest.writeInt(0);
+            dest.writeByteArray(new byte[0]);
+        }
         dest.writeString(mCaptionThumbnail);
         dest.writeString(mCopyrightThumbnail);
         dest.writeString(mUriPhoto);
-        dest.writeInt(mPhoto.length);
-        dest.writeByteArray(mPhoto);
+        if(mPhoto != null) {
+            dest.writeInt(mPhoto.length);
+            dest.writeByteArray(mPhoto);
+        } else {
+            dest.writeInt(0);
+            dest.writeByteArray(new byte[0]);
+        }
         dest.writeString(mCaptionPhoto);
         dest.writeString(mCopyrightPhoto);
         dest.writeInt(mIsFavorite);

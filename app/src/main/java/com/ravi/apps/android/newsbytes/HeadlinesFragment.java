@@ -376,16 +376,4 @@ public class HeadlinesFragment extends Fragment
 
         return thumbnailByteArray;
     }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.d(LOG_TAG, "onResumeF");
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.d(LOG_TAG, "onPause");
-    }
 }

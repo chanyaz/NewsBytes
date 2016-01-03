@@ -16,6 +16,7 @@
 
 package com.ravi.apps.android.newsbytes;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -24,14 +25,22 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ShareCompat;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.ShareActionProvider;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.ravi.apps.android.newsbytes.service.AddFavoriteService;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -69,6 +78,7 @@ public class DetailsFragment extends Fragment implements View.OnClickListener {
     private TextView mSummary;
     private Button mMarkAsFav;
     private Button mReadMore;
+    private FloatingActionButton mShare;
 
     // Reference to thumbnail target for picasso.
     private ThumbnailTarget mThumbnailTarget = new ThumbnailTarget();
@@ -76,7 +86,11 @@ public class DetailsFragment extends Fragment implements View.OnClickListener {
     // Reference to photo target for picasso.
     private PhotoTarget mPhotoTarget = new PhotoTarget();
 
+    // Reference to share action provider.
+    private ShareActionProvider mShareActionProvider;
+
     public DetailsFragment() {
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -103,16 +117,37 @@ public class DetailsFragment extends Fragment implements View.OnClickListener {
         // Set references for all the views.
         setReferencesToViews(rootView);
 
-        // Set the mark as favorite button click listener.
+        // Set the click listeners for the buttons.
         mMarkAsFav.setOnClickListener(this);
-
-        // Set the read more button click listener.
         mReadMore.setOnClickListener(this);
+        mShare.setOnClickListener(this);
 
         // Bind data to all the views.
         bindDataToView();
 
+        // If the share action provider has been created, set the share intent.
+        if(mShareActionProvider != null) {
+            mShareActionProvider.setShareIntent(createNewsShareIntent());
+        }
+
         return rootView;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Inflate the options menu.
+        inflater.inflate(R.menu.menu_details, menu);
+
+        // Retrieve the share action menu item.
+        MenuItem menuItem = menu.findItem(R.id.action_share);
+
+        // Get the share action provider.
+        mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
+
+        // If the news object has been created, set the share intent.
+        if(mNews != null) {
+            mShareActionProvider.setShareIntent(createNewsShareIntent());
+        }
     }
 
     @Override
@@ -149,7 +184,7 @@ public class DetailsFragment extends Fragment implements View.OnClickListener {
                 Log.d(LOG_TAG, "Read more button clicked");
 
                 // Check if news story uri is valid.
-                if (mNews.getUriStory() != null && !mNews.getUriStory().isEmpty()) {
+                if(mNews.getUriStory() != null && !mNews.getUriStory().isEmpty()) {
                     // Create implicit intent to view full news story.
                     Intent newsIntent = new Intent();
 
@@ -159,15 +194,53 @@ public class DetailsFragment extends Fragment implements View.OnClickListener {
                                     .removeCharsFromString(mNews.getUriStory(), "\\")));
 
                     // Check if at least one app exists on the device that can handle this intent.
-                    if (getActivity().getPackageManager().queryIntentActivities
+                    if(getActivity().getPackageManager().queryIntentActivities
                             (newsIntent, PackageManager.MATCH_DEFAULT_ONLY).size() > 0) {
                         // Pass intent to view full news story.
                         startActivity(newsIntent);
                     } else {
-                        // TODO: Display error message.
+                        // No apps exist on the device that can perform this action.
+                        // Show user message in an alert dialog.
+                        AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+                        alert.setTitle(getString(R.string.msg_err_dialog_title));
+                        alert.setMessage(getString(R.string.msg_err_no_apps));
+                        alert.setPositiveButton(getString(R.string.label_dialog_ok), null);
+                        alert.show();
                     }
                 } else {
-                    // TODO: Display error message.
+                    // News story uri is not available. Show user message in an alert dialog.
+                    AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+                    alert.setTitle(getString(R.string.msg_err_dialog_title));
+                    alert.setMessage(getString(R.string.msg_err_no_uri));
+                    alert.setPositiveButton(getString(R.string.label_dialog_ok), null);
+                    alert.show();
+                }
+
+                break;
+            }
+            case R.id.share_fab: {
+                Log.d(LOG_TAG, "Share button clicked");
+
+                // Create the intent to share the news story.
+                Intent shareIntent = Intent.createChooser(ShareCompat.IntentBuilder.from(getActivity())
+                        .setType(getString(R.string.type_share_intent))
+                        .setSubject(getHeadline())
+                        .setText(getSummary() + getString(R.string.msg_read_more) + getUriStory())
+                        .getIntent(), getString(R.string.action_share));
+
+                // Check if at least one app exists on the device that can handle this intent.
+                if(getActivity().getPackageManager().queryIntentActivities
+                        (shareIntent, PackageManager.MATCH_DEFAULT_ONLY).size() > 0) {
+                    // Pass intent to share news story.
+                    startActivity(shareIntent);
+                } else {
+                    // No apps exist on the device that can perform this action.
+                    // Show user message in an alert dialog.
+                    AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+                    alert.setTitle(getString(R.string.msg_err_dialog_title));
+                    alert.setMessage(getString(R.string.msg_err_no_apps));
+                    alert.setPositiveButton(getString(R.string.label_dialog_ok), null);
+                    alert.show();
                 }
 
                 break;
@@ -245,6 +318,7 @@ public class DetailsFragment extends Fragment implements View.OnClickListener {
         mSummary = (TextView) rootView.findViewById(R.id.summary_textview);
         mMarkAsFav = (Button) rootView.findViewById(R.id.mark_favorite_button);
         mReadMore = (Button) rootView.findViewById(R.id.read_more_button);
+        mShare = (FloatingActionButton) rootView.findViewById(R.id.share_fab);
     }
 
     /**
@@ -260,8 +334,8 @@ public class DetailsFragment extends Fragment implements View.OnClickListener {
             // Get the photo byte array from the news object.
             byte[] photoByteStream = mNews.getPhoto();
 
-            // Check if byte array for photo is non null.
-            if(photoByteStream != null) {
+            // Check if byte array for photo is non null and non zero length.
+            if(photoByteStream != null && photoByteStream.length != 0) {
                 // Get the photo bitmap from byte array.
                 Bitmap photoBitmap = BitmapFactory.decodeByteArray(photoByteStream, 0, photoByteStream.length);
 
@@ -282,17 +356,17 @@ public class DetailsFragment extends Fragment implements View.OnClickListener {
             }
         }
 
-        // Check if it's not a favorite and the thumbnail byte array was generated in the
-        // headlines screen. If not, use picasso to get the bitmap and generate thumbnail byte
+        // Check if it's not a favorite and the thumbnail byte array was not generated in the
+        // headlines screen. If so, use picasso to get the bitmap and generate thumbnail byte
         // array and then store it in the news object. It will be required if the user
         // chooses to mark this as favorite.
-        if(mNews.getIsFavorite() == 0 && mNews.getThumbnail() == null) {
+        if(mNews.getIsFavorite() == 0
+                && mNews.getThumbnail() != null
+                && mNews.getThumbnail().length == 0) {
             // Generate the thumbnail byte array using picasso.
-            if(mNews.getUriThumbnail() != null) {
-                Picasso.with(getActivity())
-                        .load(mNews.getUriThumbnail())
-                        .into(mThumbnailTarget);
-            }
+            Picasso.with(getActivity())
+                    .load(mNews.getUriThumbnail())
+                    .into(mThumbnailTarget);
         }
 
         // Set the caption.
@@ -329,5 +403,69 @@ public class DetailsFragment extends Fragment implements View.OnClickListener {
         } else {
             // TODO: Set appropriate error message.
         }
+    }
+
+    /**
+     * Returns an intent with the news headline, summary and uri added as extras.
+     */
+    private Intent createNewsShareIntent() {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+        shareIntent.setType(getString(R.string.type_share_intent));
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT, getHeadline());
+        shareIntent.putExtra(Intent.EXTRA_TEXT,
+                getSummary() + getString(R.string.msg_read_more) + getUriStory());
+        return shareIntent;
+    }
+
+    /**
+     * Gets the headline to set as subject.
+     */
+    private String getHeadline() {
+        // Get the headline from the news object.
+        String headline = null;
+        if(mNews.getHeadline() != null && !mNews.getHeadline().isEmpty()) {
+            headline = mNews.getHeadline();
+        } else {
+            // TODO: Show error message.
+            // Error message.
+            headline = "Some error message";
+        }
+
+        return headline;
+    }
+
+    /**
+     * Gets the summary to set as text.
+     */
+    private String getSummary() {
+        // Get the summary from the news object.
+        String summary = null;
+        if(mNews.getSummary() != null && !mNews.getSummary().isEmpty()) {
+            summary = mNews.getSummary();
+        } else {
+            // TODO: Show error message.
+            // Error message.
+            summary = "Some error message";
+        }
+
+        return summary;
+    }
+
+    /**
+     * Gets the uri for the story to set as text.
+     */
+    private String getUriStory() {
+        // Get the uri from the news object.
+        String uri = null;
+        if(mNews.getUriStory() != null && !mNews.getUriStory().isEmpty()) {
+            uri = mNews.getUriStory();
+        } else {
+            // TODO: Show error message.
+            // Error message.
+            uri = "Some error message";
+        }
+
+        return uri;
     }
 }

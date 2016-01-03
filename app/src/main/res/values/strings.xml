@@ -2,13 +2,19 @@
     <string name="app_name">NEWS Bytes</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="action_share">Share</string>
+
     <string name="title_activity_details">Details</string>
     <string name="title_activity_settings">Settings</string>
 
 
 
     <!-- The New York Times API key -->
-    <string name="nyt_api_key">key</string>
+    <string name="nyt_api_key" translatable="false">key</string>
+
+    <!-- Sync adapter related -->
+    <string name="sync_account_type" translatable="false">newsbytes.android.apps.ravi.com</string>
+    <string name="content_authority" translatable="false">com.ravi.apps.android.newsbytes</string>
 
     <!-- Key for news category preference -->
     <string name="pref_news_category_key" translatable="false">news_category_key</string>
@@ -43,16 +49,15 @@
     <string name="label_news_category_sports">Sports</string>
     <!-- Label for news category : Favorites -->
     <string name="label_news_category_favorites">Favorites</string>
+    <!-- Label for mark as favorite button -->
+    <string name="label_mark_as_favorite">MARK AS\nFAVORITE</string>
+    <!-- Label for read more button -->
+    <string name="label_read_more">READ\nMORE</string>
+    <!-- Label for dialog ok button -->
+    <string name="label_dialog_ok">OK</string>
 
-    <!-- Sync adapter related -->
-    <string name="sync_account_type">newsbytes.android.apps.ravi.com</string>
-    <string name="content_authority">com.ravi.apps.android.newsbytes</string>
-
-    <!-- Mark as favorite -->
-    <string name="mark_as_favorite">MARK AS\nFAVORITE</string>
-    <!-- Read more -->
-    <string name="read_more">READ\nMORE</string>
-
+    <!-- Message read more -->
+    <string name="msg_read_more">"\n\nRead more: "</string>
     <!-- Status message in empty list view depicting data load operation -->
     <string name="msg_status_loading">Loading data, please wait...</string>
     <!-- Message for news list unavailable in widget -->
@@ -61,6 +66,16 @@
     <string name="msg_err_unknown_uri">Unknown URI: </string>
     <!-- Query returned zero results -->
     <string name="msg_err_zero_results">Query returned zero results</string>
+    <!-- Title for the error dialog -->
+    <string name="msg_err_dialog_title">Error</string>
+    <!-- Message for the error dialog - no apps -->
+    <string name="msg_err_no_apps">There are no apps on the device that can perform this action.</string>
+    <!-- Message for the error dialog - no uri -->
+    <string name="msg_err_no_uri">News story URI is not available.</string>
+
+    <!-- Sets the data type for the share intent -->
+    <string name="type_share_intent">text/plain</string>
+
 
 
     <!-- Exception when application is unable to connect to the host -->

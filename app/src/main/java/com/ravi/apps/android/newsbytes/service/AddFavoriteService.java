@@ -14,13 +14,15 @@
  * limitations under the License.
  */
 
-package com.ravi.apps.android.newsbytes;
+package com.ravi.apps.android.newsbytes.service;
 
 import android.app.IntentService;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Intent;
 
+import com.ravi.apps.android.newsbytes.DetailsFragment;
+import com.ravi.apps.android.newsbytes.News;
 import com.ravi.apps.android.newsbytes.data.NewsContract;
 
 /**
