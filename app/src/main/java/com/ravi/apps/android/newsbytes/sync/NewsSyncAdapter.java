@@ -88,7 +88,7 @@ public class NewsSyncAdapter extends AbstractThreadedSyncAdapter {
     private final String NYT_FORMAT_NORMAL = "Normal";
 
     // Interval at which to sync with the news server, in seconds.
-    public static final int SYNC_INTERVAL = 60 * 60;    // One hour.
+    public static final int SYNC_INTERVAL = 30 * 60;    // One hour.
 //    public static final int SYNC_INTERVAL = 60 * 10;    // Three minutes.
 
     public static final int SYNC_FLEXTIME = SYNC_INTERVAL/3;

@@ -11,6 +11,9 @@
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS"/>
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS"/>
 
+    <!-- Permission required by the receiver to receive boot completion broadcast -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -72,9 +75,9 @@
         <receiver
             android:name=".widget.NewsWidgetProvider">
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="com.ravi.apps.android.newsbytes.ACTION_DATA_UPDATED" />
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+                <action android:name="android.appwidget.action.APPWIDGET_ENABLED"/>
+                <action android:name="com.ravi.apps.android.newsbytes.ACTION_DATA_UPDATED"/>
             </intent-filter>
             <meta-data
                 android:name="android.appwidget.provider"
@@ -84,6 +87,16 @@
         <service
             android:name=".widget.NewsWidgetRemoteViewsService"
             android:permission="android.permission.BIND_REMOTEVIEWS"/>
+        <!-- Receiver to start a sync immediately after device boot completion -->
+        <receiver
+            android:name=".receiver.NewsReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.REBOOT"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

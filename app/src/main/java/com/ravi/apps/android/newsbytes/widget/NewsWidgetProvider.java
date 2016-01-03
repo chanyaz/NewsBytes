@@ -31,6 +31,7 @@ import android.widget.RemoteViews;
 
 import com.ravi.apps.android.newsbytes.MainActivity;
 import com.ravi.apps.android.newsbytes.R;
+import com.ravi.apps.android.newsbytes.sync.NewsSyncAdapter;
 
 /**
  * Provides news headlines collection widgets.
@@ -98,9 +99,15 @@ public class NewsWidgetProvider extends AppWidgetProvider {
         String action = intent.getAction();
         Log.d(LOG_TAG, context.getString(R.string.on_receive) + action);
 
-        // Notify the widgets to refresh their views if the underlying data has been updated.
-        if(context.getString(R.string.action_data_updated).equals(action)) {
+        // If the widget was enabled, start the sync adapter.
+        if(AppWidgetManager.ACTION_APPWIDGET_ENABLED.equals(action)) {
+            // Initialize the sync adapter and trigger an immediate sync.
+            NewsSyncAdapter.initializeSyncAdapter(context);
+            NewsSyncAdapter.syncImmediately(context);
+        }
 
+        // If the underlying data has been updated, notify the widgets to refresh their views
+        if(context.getString(R.string.action_data_updated).equals(action)) {
             // Get the app widget manager.
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
 
