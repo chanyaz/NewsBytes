@@ -18,18 +18,25 @@ package com.ravi.apps.android.newsbytes.sync;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SyncRequest;
 import android.content.SyncResult;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.ravi.apps.android.newsbytes.MainActivity;
 import com.ravi.apps.android.newsbytes.R;
 import com.ravi.apps.android.newsbytes.Utility;
 import com.ravi.apps.android.newsbytes.data.NewsContract;
@@ -92,6 +99,9 @@ public class NewsSyncAdapter extends AbstractThreadedSyncAdapter {
 //    public static final int SYNC_INTERVAL = 60 * 10;    // Three minutes.
 
     public static final int SYNC_FLEXTIME = SYNC_INTERVAL/3;
+
+    // News notification id.
+    private static final int NEWS_NOTIFICATION_ID = 1234;
 
     public NewsSyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
@@ -239,6 +249,9 @@ public class NewsSyncAdapter extends AbstractThreadedSyncAdapter {
 
             // Send a local broadcast informing the widget to refresh it's data.
             Utility.sendDataUpdatedBroadcast(getContext());
+
+            // Send a notification to the user that fresh news updates are now available.
+            sendNewsNotification(getContext());
 
         } catch(IOException e) {
             Log.e(LOG_TAG, "Error: loadInBackground(): " + e.getLocalizedMessage());
@@ -505,5 +518,49 @@ public class NewsSyncAdapter extends AbstractThreadedSyncAdapter {
 
         // Trigger an immediate sync to get the ball rolling!
         syncImmediately(context);
+    }
+
+    /**
+     * Notifies the user that fresh news updates are now available.
+     */
+    private void sendNewsNotification(Context context) {
+        // Create the intent to open the app when the user taps on the notification.
+        Intent mainIntent = new Intent(context, MainActivity.class);
+
+        // Create the stack builder object.
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+
+        // Add the intent to the top of the stack.
+        stackBuilder.addNextIntent(mainIntent);
+
+        // Get a pending intent containing the entire back stack.
+        PendingIntent pendingIntent =
+                stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        // Create the notification builder object.
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
+
+        // Set the pending intent onto the notification.
+        builder.setContentIntent(pendingIntent);
+
+        // Set the notification to automatically dismiss after the user taps it.
+        builder.setAutoCancel(true);
+
+        // Set the notification title and text.
+        builder.setContentTitle(context.getString(R.string.app_name))
+                .setContentText(context.getString(R.string.msg_notification_text));
+
+        // Set the notification ticker.
+        builder.setTicker(context.getString(R.string.msg_notification_text));
+
+        // TODO: Set some real icons please!!!
+        // Set the notification large and small icons.
+        builder.setSmallIcon(R.drawable.ic_small_notification)
+                .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_large_notification));
+
+        // Send the notification.
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(
+                context.NOTIFICATION_SERVICE);
+        notificationManager.notify(NEWS_NOTIFICATION_ID, builder.build());
     }
 }

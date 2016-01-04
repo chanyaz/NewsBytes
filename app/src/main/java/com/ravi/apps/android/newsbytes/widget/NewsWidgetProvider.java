@@ -99,7 +99,7 @@ public class NewsWidgetProvider extends AppWidgetProvider {
         String action = intent.getAction();
         Log.d(LOG_TAG, context.getString(R.string.on_receive) + action);
 
-        // If the widget was enabled, start the sync adapter.
+        // If the widget was enabled, start the sync adapter for immediate sync.
         if(AppWidgetManager.ACTION_APPWIDGET_ENABLED.equals(action)) {
             // Initialize the sync adapter and trigger an immediate sync.
             NewsSyncAdapter.initializeSyncAdapter(context);
