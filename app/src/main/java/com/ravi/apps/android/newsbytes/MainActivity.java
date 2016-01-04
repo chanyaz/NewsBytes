@@ -52,6 +52,9 @@ public class MainActivity extends AppCompatActivity
 
         Log.d(LOG_TAG, "onCreate");
 
+        // Start analytics tracking.
+        ((NewsApplication) getApplication()).startTracking();
+
         // Set default values only the first time.
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 

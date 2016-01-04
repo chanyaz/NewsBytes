@@ -375,6 +375,16 @@ public class HeadlinesFragment extends Fragment
      * linked to the image view passed in.
      */
     private byte[] convertToByteArray(ImageView imageView) {
+        // Check if image view is valid.
+        if(imageView == null) {
+            return null;
+        }
+
+        // Check if image view has associated drawable.
+        if(imageView.getDrawable() == null) {
+            return null;
+        }
+
         // Get bitmap from the image view.
         Bitmap bitmap = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
 
