@@ -33,6 +33,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.ravi.apps.android.newsbytes.data.NewsContract.NewsEntry;
 
 import java.io.ByteArrayOutputStream;
@@ -95,6 +97,9 @@ public class HeadlinesFragment extends Fragment
     // Text view for displaying appropriate user message when the list is blank.
     private TextView mEmptyListView;
 
+    // Ad view displaying banner ad.
+    private AdView mAdView;
+
     // Cursor adapter supplying headlines to the list.
     private HeadlinesAdapter mHeadlinesAdapter;
 
@@ -153,6 +158,13 @@ public class HeadlinesFragment extends Fragment
                 mListPosition = savedInstanceState.getInt(LIST_POSITION_KEY);
             }
         }
+
+        // Get the banner ad view.
+        mAdView = (AdView) rootView.findViewById(R.id.adView);
+
+        // Create an ad request and load it into the ad view.
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
 
         return rootView;
     }

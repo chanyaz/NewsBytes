@@ -11,6 +11,10 @@
 
     <!-- The New York Times API key -->
     <string name="nyt_api_key" translatable="false">key</string>
+    <!-- Banner ad unit id -->
+    <string name="banner_ad_unit_id" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
+
+
 
     <!-- Sync adapter related -->
     <string name="sync_account_type" translatable="false">newsbytes.android.apps.ravi.com</string>
