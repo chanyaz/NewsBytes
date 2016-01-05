@@ -50,8 +50,6 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Log.d(LOG_TAG, "onCreate");
-
         // Start analytics tracking.
         ((NewsApplication) getApplication()).startTracking();
 
@@ -78,7 +76,7 @@ public class MainActivity extends AppCompatActivity
             if (intent != null
                     && intent.getAction() != null
                     && intent.getAction().equals(getString(R.string.action_item_clicked))) {
-                Log.d(LOG_TAG, getString(R.string.on_create_item_clicked));
+                Log.d(LOG_TAG, getString(R.string.log_on_create_widget_item_clicked));
 
                 // Set the widget list item clicked flag.
                 isWidgetItemClicked = true;
@@ -87,7 +85,7 @@ public class MainActivity extends AppCompatActivity
                 widgetItemClickedPosition = intent.getIntExtra(
                         getString(R.string.extra_widget_item_position), ListView.INVALID_POSITION);
 
-                Log.d(LOG_TAG, getString(R.string.on_create_position)
+                Log.d(LOG_TAG, getString(R.string.log_on_create_widget_item_position)
                         + ((Integer) widgetItemClickedPosition).toString());
             }
         }
@@ -137,8 +135,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onHeadlineSelected(News news) {
-        Log.d(LOG_TAG, "onHeadlineSelected");
-
         // Check if it's in two pane mode.
         if(mIsTwoPaneMode) {
             // Package the parcelable news data into the arguments bundle.

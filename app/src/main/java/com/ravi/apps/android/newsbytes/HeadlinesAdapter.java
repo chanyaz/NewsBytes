@@ -34,7 +34,7 @@ import com.squareup.picasso.Picasso;
  */
 public class HeadlinesAdapter extends CursorAdapter {
 
-    // Cache of the children views for a headlines list item.
+    // Cache of the child views for a headlines list item.
     public static class ViewHolder {
         public final ImageView thumbnailView;
         public final TextView headlineView;

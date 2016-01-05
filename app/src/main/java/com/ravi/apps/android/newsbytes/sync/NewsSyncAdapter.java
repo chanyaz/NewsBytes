@@ -108,7 +108,7 @@ public class NewsSyncAdapter extends AbstractThreadedSyncAdapter {
     }
 
     public static void initializeSyncAdapter(Context context) {
-        Log.d(LOG_TAG, "initializeSyncAdapter");
+        Log.d(LOG_TAG, context.getString(R.string.log_initialize_sync_adapter));
 
         getSyncAccount(context);
     }
@@ -119,8 +119,6 @@ public class NewsSyncAdapter extends AbstractThreadedSyncAdapter {
      * onAccountCreated method so we can initialize things.
      */
     public static Account getSyncAccount(Context context) {
-        Log.d(LOG_TAG, "getSyncAccount");
-
         // Get an instance of the android account manager.
         AccountManager accountManager =
                 (AccountManager) context.getSystemService(Context.ACCOUNT_SERVICE);
@@ -145,8 +143,6 @@ public class NewsSyncAdapter extends AbstractThreadedSyncAdapter {
      * Schedules periodic execution of the sync adapter.
      */
     public static void configurePeriodicSync(Context context, int syncInterval, int flexTime) {
-        Log.d(LOG_TAG, "configurePeriodicSync");
-
         // Get account and authority.
         Account account = getSyncAccount(context);
         String authority = context.getString(R.string.content_authority);
@@ -167,7 +163,7 @@ public class NewsSyncAdapter extends AbstractThreadedSyncAdapter {
      * Instructs the sync adapter to sync immediately.
      */
     public static void syncImmediately(Context context) {
-        Log.d(LOG_TAG, "syncImmediately");
+        Log.d(LOG_TAG, context.getString(R.string.log_sync_immediately));
 
         Bundle bundle = new Bundle();
         bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
@@ -178,7 +174,7 @@ public class NewsSyncAdapter extends AbstractThreadedSyncAdapter {
 
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
-        Log.d(LOG_TAG, "onPerformSync");
+        Log.d(LOG_TAG, getContext().getString(R.string.log_on_perform_sync));
 
         HttpURLConnection httpURLConnection = null;
         BufferedReader bufferedReader = null;
@@ -254,21 +250,24 @@ public class NewsSyncAdapter extends AbstractThreadedSyncAdapter {
             sendNewsNotification(getContext());
 
         } catch(IOException e) {
-            Log.e(LOG_TAG, "Error: loadInBackground(): " + e.getLocalizedMessage());
+            Log.e(LOG_TAG, getContext().getString(R.string.log_on_perform_sync_error)
+                    + e.getLocalizedMessage());
         } catch(JSONException e) {
-            Log.e(LOG_TAG, "Error: loadInBackground(): " + e.getLocalizedMessage());
+            Log.e(LOG_TAG, getContext().getString(R.string.log_on_perform_sync_error)
+                    + e.getLocalizedMessage());
         } finally {
             // Close url connection, if open.
-            if (httpURLConnection != null) {
+            if(httpURLConnection != null) {
                 httpURLConnection.disconnect();
             }
 
             // Close the buffered reader, if open.
-            if (bufferedReader != null) {
+            if(bufferedReader != null) {
                 try {
                     bufferedReader.close();
-                } catch (final IOException e) {
-                    Log.e(LOG_TAG, "Error: loadInBackground(): " + e.getLocalizedMessage());
+                } catch(final IOException e) {
+                    Log.e(LOG_TAG, getContext().getString(R.string.log_on_perform_sync_error)
+                            + e.getLocalizedMessage());
                 }
             }
         }
@@ -497,9 +496,9 @@ public class NewsSyncAdapter extends AbstractThreadedSyncAdapter {
                         .bulkInsert(NewsContract.NewsEntry.CONTENT_URI, arrayContentValues);
             }
 
-            Log.d(LOG_TAG, "Sync Complete");
-            Log.d(LOG_TAG, "Rows deleted: " + rowsDeleted);
-            Log.d(LOG_TAG, "Rows inserted: " + rowsInserted);
+            Log.d(LOG_TAG, getContext().getString(R.string.log_sync_completed));
+            Log.d(LOG_TAG, getContext().getString(R.string.log_rows_deleted) + rowsDeleted);
+            Log.d(LOG_TAG, getContext().getString(R.string.log_rows_inserted) + rowsInserted);
 
         } catch (JSONException e) {
             Log.e(LOG_TAG, e.getMessage(), e);
@@ -508,8 +507,6 @@ public class NewsSyncAdapter extends AbstractThreadedSyncAdapter {
     }
 
     private static void onAccountCreated(Account newAccount, Context context) {
-        Log.d(LOG_TAG, "onAccountCreated");
-
         // Configure the sync.
         NewsSyncAdapter.configurePeriodicSync(context, SYNC_INTERVAL, SYNC_FLEXTIME);
 

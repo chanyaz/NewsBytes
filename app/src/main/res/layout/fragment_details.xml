@@ -2,7 +2,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layoutDirection="locale">
 
     <ScrollView
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -24,7 +25,7 @@
                 android:layout_height="210dp"
                 android:scaleType="fitXY"
                 android:contentDescription="@string/a11y_details_photo"
-                android:nextFocusDown="@id/caption_textview"/>
+                android:nextFocusDown="@+id/caption_textview"/>
 
             <!-- Caption -->
             <TextView
@@ -37,8 +38,9 @@
                 android:paddingRight="16dp"
                 android:paddingTop="4dp"
                 android:contentDescription="@string/a11y_details_caption"
-                android:nextFocusUp="@id/photo_imageview"
-                android:nextFocusDown="@id/headline_textview"/>
+                android:nextFocusUp="@+id/photo_imageview"
+                android:nextFocusDown="@+id/headline_textview"
+                android:textDirection="locale"/>
 
             <!-- Headline -->
             <TextView
@@ -49,8 +51,9 @@
                 android:textSize="18sp"
                 android:padding="16dp"
                 android:contentDescription="@string/a11y_headline"
-                android:nextFocusUp="@id/caption_textview"
-                android:nextFocusDown="@id/author_textview"/>
+                android:nextFocusUp="@+id/caption_textview"
+                android:nextFocusDown="@+id/author_textview"
+                android:textDirection="locale"/>
 
             <!-- Author -->
             <TextView
@@ -62,8 +65,9 @@
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
                 android:contentDescription="@string/a11y_details_author"
-                android:nextFocusUp="@id/headline_textview"
-                android:nextFocusDown="@id/date_textview"/>
+                android:nextFocusUp="@+id/headline_textview"
+                android:nextFocusDown="@+id/date_textview"
+                android:textDirection="locale"/>
 
             <!-- Date -->
             <TextView
@@ -76,8 +80,9 @@
                 android:paddingRight="16dp"
                 android:paddingTop="4dp"
                 android:contentDescription="@string/a11y_details_date"
-                android:nextFocusUp="@id/author_textview"
-                android:nextFocusDown="@id/summary_textview"/>
+                android:nextFocusUp="@+id/author_textview"
+                android:nextFocusDown="@+id/summary_textview"
+                android:textDirection="locale"/>
 
             <!-- Summary -->
             <TextView
@@ -88,8 +93,9 @@
                 android:textSize="14sp"
                 android:padding="16dp"
                 android:contentDescription="@string/a11y_details_summary"
-                android:nextFocusUp="@id/date_textview"
-                android:nextFocusDown="@id/mark_favorite_button"/>
+                android:nextFocusUp="@+id/date_textview"
+                android:nextFocusDown="@+id/mark_favorite_button"
+                android:textDirection="locale"/>
 
             <!-- Mark As Favorite and Read More -->
             <LinearLayout
@@ -108,8 +114,8 @@
                     android:text="@string/label_mark_as_favorite"
                     android:enabled="false"
                     android:contentDescription="@string/label_mark_as_favorite"
-                    android:nextFocusUp="@id/summary_textview"
-                    android:nextFocusRight="@id/read_more_button"/>
+                    android:nextFocusUp="@+id/summary_textview"
+                    android:nextFocusRight="@+id/read_more_button"/>
 
                 <!-- Read More -->
                 <Button
@@ -119,8 +125,8 @@
                     android:text="@string/label_read_more"
                     android:enabled="true"
                     android:contentDescription="@string/label_read_more"
-                    android:nextFocusLeft="@id/mark_favorite_button"
-                    android:nextFocusRight="@id/share_fab"/>
+                    android:nextFocusLeft="@+id/mark_favorite_button"
+                    android:nextFocusRight="@+id/share_fab"/>
 
             </LinearLayout>
         </LinearLayout>
@@ -138,7 +144,7 @@
         app:pressedTranslationZ="12dp"
         app:borderWidth="0dp"
         android:contentDescription="@string/a11y_share_button"
-        android:nextFocusLeft="@id/read_more_button"/>
+        android:nextFocusLeft="@+id/read_more_button"/>
 
 </FrameLayout>
 

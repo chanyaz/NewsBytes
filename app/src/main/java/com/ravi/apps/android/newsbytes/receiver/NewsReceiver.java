@@ -36,7 +36,7 @@ public class NewsReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         // Get the intent action.
         String action = intent.getAction();
-        Log.d(LOG_TAG, context.getString(R.string.on_receive) + action);
+        Log.d(LOG_TAG, context.getString(R.string.log_on_receive) + action);
 
         // Check if the device was booted.
         if(Intent.ACTION_BOOT_COMPLETED.equals(action) || Intent.ACTION_REBOOT.equals(action)) {

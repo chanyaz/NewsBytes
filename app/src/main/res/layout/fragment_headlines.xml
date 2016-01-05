@@ -4,7 +4,8 @@
     xmlns:ads="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.ravi.apps.android.newsbytes.HeadlinesFragment">
+    tools:context="com.ravi.apps.android.newsbytes.HeadlinesFragment"
+    android:layoutDirection="locale">
 
     <com.google.android.gms.ads.AdView
         android:id="@+id/adview"
@@ -14,7 +15,7 @@
         android:layout_alignParentBottom="true"
         ads:adSize="SMART_BANNER"
         ads:adUnitId="@string/banner_ad_unit_id"
-        android:nextFocusUp="@id/headline_framelayout">
+        android:nextFocusUp="@+id/headline_framelayout">
     </com.google.android.gms.ads.AdView>
 
     <FrameLayout
@@ -30,7 +31,8 @@
             android:id="@+id/headlines_listview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:divider="@null">
+            android:divider="@android:color/darker_gray"
+            android:dividerHeight="2sp">
         </ListView>
 
         <!-- Displays status message in empty list -->
@@ -42,7 +44,8 @@
             android:gravity="center"
             android:fontFamily="sans-serif-condensed"
             style="@android:style/TextAppearance.Large"
-            android:contentDescription="@string/msg_status_loading">
+            android:contentDescription="@string/msg_status_loading"
+            android:textDirection="locale">
         </TextView>
 
     </FrameLayout>

@@ -17,6 +17,7 @@
         android:paddingStart="8dp"
         android:paddingRight="8dp"
         android:paddingEnd="8dp"
-        android:contentDescription="@string/a11y_headline"/>
+        android:contentDescription="@string/a11y_headline"
+        android:textDirection="locale"/>
 
 </FrameLayout>

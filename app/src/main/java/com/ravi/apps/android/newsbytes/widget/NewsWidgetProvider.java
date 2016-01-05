@@ -44,7 +44,7 @@ public class NewsWidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        Log.d(LOG_TAG, context.getString(R.string.on_update));
+        Log.d(LOG_TAG, context.getString(R.string.log_on_update));
 
         // Update each app widget instance with remote view and corresponding remote adapter.
         for(int appWidgetId : appWidgetIds) {
@@ -97,7 +97,7 @@ public class NewsWidgetProvider extends AppWidgetProvider {
 
         // Get the intent action.
         String action = intent.getAction();
-        Log.d(LOG_TAG, context.getString(R.string.on_receive) + action);
+        Log.d(LOG_TAG, context.getString(R.string.log_on_receive) + action);
 
         // If the widget was enabled, start the sync adapter for immediate sync.
         if(AppWidgetManager.ACTION_APPWIDGET_ENABLED.equals(action)) {

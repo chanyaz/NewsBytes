@@ -35,7 +35,7 @@ public class NewsWidgetRemoteViewsService extends RemoteViewsService {
 
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
-        Log.d(LOG_TAG, getString(R.string.on_get_view_factory));
+        Log.d(LOG_TAG, getString(R.string.log_on_get_view_factory));
 
         // Create the remote views factory object.
         NewsWidgetRemoteViewsFactory newsWidgetRemoteViewsFactory = new

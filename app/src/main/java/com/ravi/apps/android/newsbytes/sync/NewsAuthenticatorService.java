@@ -34,7 +34,7 @@ public class NewsAuthenticatorService extends Service {
         mAuthenticator = new NewsAuthenticator(this);
     }
 
-    /*
+    /**
      * When the system binds to this Service to make the RPC call
      * return the authenticator's IBinder.
      */

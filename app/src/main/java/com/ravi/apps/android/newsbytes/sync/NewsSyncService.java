@@ -19,7 +19,6 @@ package com.ravi.apps.android.newsbytes.sync;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
-import android.util.Log;
 
 public class NewsSyncService extends Service {
 
@@ -31,7 +30,6 @@ public class NewsSyncService extends Service {
 
     @Override
     public void onCreate() {
-        Log.d("NewsSyncService", "onCreate()");
         synchronized(sSyncAdapterLock) {
             // Create the news sync adapter ONLY if it does not exist.
             if (sNewsSyncAdapter == null) {

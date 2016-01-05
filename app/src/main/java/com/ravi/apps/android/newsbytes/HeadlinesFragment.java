@@ -118,7 +118,6 @@ public class HeadlinesFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.d(LOG_TAG, "onCreateView");
         // Inflate the root view.
         View rootView = inflater.inflate(R.layout.fragment_headlines, container, false);
 
@@ -173,8 +172,6 @@ public class HeadlinesFragment extends Fragment
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        Log.d(LOG_TAG, "onActivityCreated");
-
         // Initialize the news cursor loader.
         getLoaderManager().initLoader(NEWS_LOADER, null, this);
     }
@@ -220,8 +217,6 @@ public class HeadlinesFragment extends Fragment
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Log.d(LOG_TAG, "onCreateLoader");
-
         // Sort order for the query.
         final String sortOrder = NewsEntry.COLUMN_DATE +
                 getActivity().getString(R.string.descending_sort_order);
@@ -232,13 +227,9 @@ public class HeadlinesFragment extends Fragment
 
         // Set selection based on whether news category is favorite.
         if(mNewsCategoryPreference.equals(getString(R.string.pref_news_category_favorites))) {
-            Log.d(LOG_TAG, "onCreateLoader: Querying favs...");
-
             // Only get the favorite news stories.
             selectionArgs = new String[]{Integer.toString(1)};
         } else {
-            Log.d(LOG_TAG, "onCreateLoader: Querying non-favs...");
-
             // Get the news stories other than favorites.
             selectionArgs = new String[]{Integer.toString(0)};
         }
@@ -255,28 +246,24 @@ public class HeadlinesFragment extends Fragment
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        Log.d(LOG_TAG, "onLoadFinished");
-
         // Check if valid cursor was returned.
         if(data != null) {
             // Check if the cursor is empty.
             if(data.moveToFirst() == false) {
+                Log.d(LOG_TAG, getActivity().getString(R.string.log_on_load_finished_empty));
+
+                // TODO: Show error message.
                 // Display appropriate status message to user and return.
 //                mEmptyListView.setText(getString(R.string.msg_err_no_favorites));
-                mEmptyListView.setText("Empty cursor returned");
-                Log.d(LOG_TAG, "onLoadFinished: Empty cursor returned");
-
                 return;
             }
-
-            Log.d(LOG_TAG, "onLoadFinished: cursor size: " + data.getCount());
 
             // Assign the cursor to the adapter.
             mHeadlinesAdapter.swapCursor(data);
 
             // Check if widget list item was clicked.
             if(MainActivity.isWidgetItemClicked) {
-                Log.d(LOG_TAG, getActivity().getString(R.string.on_load_finished_item_clicked));
+                Log.d(LOG_TAG, getActivity().getString(R.string.log_on_load_finished_widget_item_clicked));
 
                 // Set list position to widget item click position.
                 if(MainActivity.widgetItemClickedPosition != ListView.INVALID_POSITION) {
@@ -302,25 +289,22 @@ public class HeadlinesFragment extends Fragment
                 mListView.setSelection(mListPosition);
             }
         } else {
+            Log.d(LOG_TAG, getActivity().getString(R.string.log_on_load_finished_null));
+
+            // TODO: Show error message.
             // Display appropriate error message to user.
 //            mEmptyListView.setText(getString(R.string.msg_err_fetch_favorites));
-            mEmptyListView.setText("Null cursor returned");
-            Log.d(LOG_TAG, "onLoadFinished: Null cursor returned");
         }
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        Log.d(LOG_TAG, "onLoaderReset");
-
         // Relinquish the cursor attached to the adapter.
         mHeadlinesAdapter.swapCursor(null);
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Log.d(LOG_TAG, "onItemClick");
-
         // Get the cursor at the click position.
         Cursor newsCursor = (Cursor) parent.getItemAtPosition(position);
 

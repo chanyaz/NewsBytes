@@ -29,7 +29,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ShareCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.ShareActionProvider;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -52,7 +51,7 @@ import java.io.ByteArrayOutputStream;
 public class DetailsFragment extends Fragment implements View.OnClickListener {
 
     // Tag for logging messages.
-    private static final String LOG_TAG = HeadlinesFragment.class.getSimpleName();
+    private static final String LOG_TAG = DetailsFragment.class.getSimpleName();
 
     // Tag used to identify this fragment.
     public static final String DETAILS_FRAGMENT_TAG = "details_fragment_tag";
@@ -163,8 +162,6 @@ public class DetailsFragment extends Fragment implements View.OnClickListener {
         // Determine which view was clicked and proceed accordingly.
         switch(v.getId()) {
             case R.id.mark_favorite_button: {
-                Log.d(LOG_TAG, "Mark as fav button clicked");
-
                 // Disable mark as favorite button.
                 mMarkAsFav.setEnabled(false);
 
@@ -181,8 +178,6 @@ public class DetailsFragment extends Fragment implements View.OnClickListener {
                 break;
             }
             case R.id.read_more_button: {
-                Log.d(LOG_TAG, "Read more button clicked");
-
                 // Check if news story uri is valid.
                 if(mNews.getUriStory() != null && !mNews.getUriStory().isEmpty()) {
                     // Create implicit intent to view full news story.
@@ -219,8 +214,6 @@ public class DetailsFragment extends Fragment implements View.OnClickListener {
                 break;
             }
             case R.id.share_fab: {
-                Log.d(LOG_TAG, "Share button clicked");
-
                 // Create the intent to share the news story.
                 Intent shareIntent = Intent.createChooser(ShareCompat.IntentBuilder.from(getActivity())
                         .setType(getString(R.string.type_share_intent))

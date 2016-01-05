@@ -65,12 +65,12 @@ public class NewsWidgetRemoteViewsFactory implements RemoteViewsService.RemoteVi
 
     @Override
     public void onCreate() {
-        Log.d(LOG_TAG, mContext.getString(R.string.on_create));
+        Log.d(LOG_TAG, mContext.getString(R.string.log_on_create));
     }
 
     @Override
     public void onDestroy() {
-        Log.d(LOG_TAG, mContext.getString(R.string.on_destroy));
+        Log.d(LOG_TAG, mContext.getString(R.string.log_on_destroy));
 
         // Check and close the cursor.
         if(mCursor != null) {
@@ -113,8 +113,6 @@ public class NewsWidgetRemoteViewsFactory implements RemoteViewsService.RemoteVi
 
     @Override
     public RemoteViews getViewAt(int i) {
-        Log.d(LOG_TAG, mContext.getString(R.string.get_view_at));
-
         // Check if it's a valid position and cursor exists.
         if(i == AdapterView.INVALID_POSITION || mCursor == null || !mCursor.moveToPosition(i)) {
             return null;
@@ -127,17 +125,13 @@ public class NewsWidgetRemoteViewsFactory implements RemoteViewsService.RemoteVi
         // Get the headline and set it onto the text view.
         String headline = mCursor.getString(HeadlinesFragment.COL_HEADLINE);
 
-        // Check if headline is non null and non empty.
+        // Check if headline is non null and non empty. If so, set headline & content description.
         if(headline != null && !headline.isEmpty()) {
             remoteViews.setTextViewText(R.id.widget_headline, headline);
+            remoteViews.setContentDescription(R.id.widget_headline,headline);
         } else {
             // TODO: Display headline not available message.
         }
-
-        // TODO: Set the content descriptions.
-        // Set the content description for the remote views.
-//        remoteViews.setContentDescription(R.id.widget_headline,
-//                mContext.getString(R.string.a11y_home_name, headline));
 
         // Create and set the fill in intent.
         // Pass in the position of the widget news item clicked as intent extra.
@@ -150,7 +144,7 @@ public class NewsWidgetRemoteViewsFactory implements RemoteViewsService.RemoteVi
 
     @Override
     public void onDataSetChanged() {
-        Log.d(LOG_TAG, mContext.getString(R.string.on_dataset_changed));
+        Log.d(LOG_TAG, mContext.getString(R.string.log_on_dataset_changed));
 
         // Check and close cursor.
         if(mCursor != null) {
@@ -172,13 +166,9 @@ public class NewsWidgetRemoteViewsFactory implements RemoteViewsService.RemoteVi
         // Set selection based on whether news category is favorite.
         if(Utility.getNewsCategoryPreference(mContext, null)
                 .equals(mContext.getResources().getString(R.string.pref_news_category_favorites))) {
-            Log.d(LOG_TAG, "onDataSetChanged: Querying favs...");
-
             // Only get the favorite news stories.
             selectionArgs = new String[]{Integer.toString(1)};
         } else {
-            Log.d(LOG_TAG, "onDataSetChanged: Querying non-favs...");
-
             // Get the news stories other than favorites.
             selectionArgs = new String[]{Integer.toString(0)};
         }
