@@ -110,6 +110,7 @@ public class HeadlinesAdapter extends CursorAdapter {
         // Check if headline is non null and non empty.
         if(headline != null && !headline.isEmpty()) {
             viewHolder.headlineView.setText(headline);
+            viewHolder.headlineView.setContentDescription(headline);
         } else {
             // TODO: Display headline not available message.
         }

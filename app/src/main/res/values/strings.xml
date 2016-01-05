@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:xliff="http://schemas.android.com/apk/res-auto">
     <string name="app_name">NEWS Bytes</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
@@ -7,14 +7,10 @@
     <string name="title_activity_details">Details</string>
     <string name="title_activity_settings">Settings</string>
 
-
-
     <!-- The New York Times API key -->
     <string name="nyt_api_key" translatable="false">key</string>
     <!-- Banner ad unit id -->
     <string name="banner_ad_unit_id" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
-
-
 
     <!-- Sync adapter related -->
     <string name="sync_account_type" translatable="false">newsbytes.android.apps.ravi.com</string>
@@ -122,6 +118,15 @@
     <!-- Descending sort order for the query -->
     <string name="descending_sort_order" translatable="false">" DESC"</string>
 
+    <!-- Accessibility -->
+    <string name="a11y_headline">Headline</string>
+    <string name="a11y_thumbnail">Thumbnail</string>
+    <string name="a11y_details_photo">Photo</string>
+    <string name="a11y_details_caption">Caption</string>
+    <string name="a11y_details_author">Author</string>
+    <string name="a11y_details_date">Date</string>
+    <string name="a11y_details_summary">Summary</string>
+    <string name="a11y_share_button">Share</string>
 
 
 

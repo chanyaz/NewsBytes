@@ -256,12 +256,15 @@ public class DetailsFragment extends Fragment implements View.OnClickListener {
 
         @Override
         public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-            // Get byte array from thumbnail bitmap.
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            // Check if bitmap is valid before attempting to convert into byte array.
+            if(bitmap != null) {
+                // Get byte array from thumbnail bitmap.
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
 
-            // Set the thumbnail byte array in the news object.
-            mNews.setThumbnailByteArray(stream.toByteArray());
+                // Set the thumbnail byte array in the news object.
+                mNews.setThumbnailByteArray(stream.toByteArray());
+            }
         }
 
         @Override
@@ -281,15 +284,18 @@ public class DetailsFragment extends Fragment implements View.OnClickListener {
 
         @Override
         public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-            // Set photo bitmap onto the image view.
-            mPhoto.setImageBitmap(bitmap);
+            // Check if bitmap is valid before attempting to convert into byte array.
+            if(bitmap != null) {
+                // Set photo bitmap onto the image view.
+                mPhoto.setImageBitmap(bitmap);
 
-            // Get byte array from photo bitmap.
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                // Get byte array from photo bitmap.
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
 
-            // Set the photo byte array in the news object.
-            mNews.setPhotoByteArray(stream.toByteArray());
+                // Set the photo byte array in the news object.
+                mNews.setPhotoByteArray(stream.toByteArray());
+            }
 
             // Now enable the mark as favorite button if this is not a favorite story.
             if(mNews.getIsFavorite() == 0) {
@@ -372,6 +378,7 @@ public class DetailsFragment extends Fragment implements View.OnClickListener {
         // Set the caption.
         if(mNews.getCaptionPhoto() != null && !mNews.getCaptionPhoto().isEmpty()) {
             mCaption.setText(mNews.getCaptionPhoto());
+            mCaption.setContentDescription(mNews.getCaptionPhoto());
         } else {
             // TODO: Set appropriate error meassage.
         }
@@ -379,6 +386,7 @@ public class DetailsFragment extends Fragment implements View.OnClickListener {
         // Set the headline.
         if(mNews.getHeadline() != null && !mNews.getHeadline().isEmpty()) {
             mHeadline.setText(mNews.getHeadline());
+            mHeadline.setContentDescription(mNews.getHeadline());
         } else {
             // TODO: Set appropriate error meassage.
         }
@@ -386,6 +394,7 @@ public class DetailsFragment extends Fragment implements View.OnClickListener {
         // Set the author.
         if(mNews.getAuthor() != null && !mNews.getAuthor().isEmpty()) {
             mAuthor.setText(mNews.getAuthor());
+            mAuthor.setContentDescription(mNews.getAuthor());
         } else {
             // TODO: Set appropriate error message.
         }
@@ -393,6 +402,7 @@ public class DetailsFragment extends Fragment implements View.OnClickListener {
         // Set the date.
         if(mNews.getDate() != null && !mNews.getDate().isEmpty()) {
             mDate.setText(mNews.getDate());
+            mDate.setContentDescription(mNews.getDate());
         } else {
             // TODO: Set appropriate error message.
         }
@@ -400,6 +410,7 @@ public class DetailsFragment extends Fragment implements View.OnClickListener {
         // Set the summary.
         if(mNews.getSummary() != null && !mNews.getSummary().isEmpty()) {
             mSummary.setText(mNews.getSummary());
+            mSummary.setContentDescription(mNews.getSummary());
         } else {
             // TODO: Set appropriate error message.
         }

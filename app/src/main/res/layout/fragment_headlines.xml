@@ -7,21 +7,23 @@
     tools:context="com.ravi.apps.android.newsbytes.HeadlinesFragment">
 
     <com.google.android.gms.ads.AdView
-        android:id="@+id/adView"
+        android:id="@+id/adview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
         ads:adSize="SMART_BANNER"
-        ads:adUnitId="@string/banner_ad_unit_id">
+        ads:adUnitId="@string/banner_ad_unit_id"
+        android:nextFocusUp="@id/headline_framelayout">
     </com.google.android.gms.ads.AdView>
 
     <FrameLayout
         android:id="@+id/headline_framelayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/adView"
-        android:layout_marginBottom="16dp">
+        android:layout_above="@id/adview"
+        android:layout_marginBottom="16dp"
+        android:nextFocusDown="@id/adview">
 
         <!-- Displays a list of news headlines and thumbnails -->
         <ListView
@@ -39,10 +41,10 @@
             android:text="@string/msg_status_loading"
             android:gravity="center"
             android:fontFamily="sans-serif-condensed"
-            style="@android:style/TextAppearance.Large">
+            style="@android:style/TextAppearance.Large"
+            android:contentDescription="@string/msg_status_loading">
         </TextView>
 
     </FrameLayout>
-
 </RelativeLayout>
 

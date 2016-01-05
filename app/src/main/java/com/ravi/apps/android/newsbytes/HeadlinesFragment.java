@@ -160,7 +160,7 @@ public class HeadlinesFragment extends Fragment
         }
 
         // Get the banner ad view.
-        mAdView = (AdView) rootView.findViewById(R.id.adView);
+        mAdView = (AdView) rootView.findViewById(R.id.adview);
 
         // Create an ad request and load it into the ad view.
         AdRequest adRequest = new AdRequest.Builder().build();
@@ -375,13 +375,8 @@ public class HeadlinesFragment extends Fragment
      * linked to the image view passed in.
      */
     private byte[] convertToByteArray(ImageView imageView) {
-        // Check if image view is valid.
-        if(imageView == null) {
-            return null;
-        }
-
-        // Check if image view has associated drawable.
-        if(imageView.getDrawable() == null) {
+        // Check if image view is valid and has associated drawable. If not return null.
+        if(imageView == null || imageView.getDrawable() == null) {
             return null;
         }
 

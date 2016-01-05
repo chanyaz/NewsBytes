@@ -22,7 +22,9 @@
                 android:id="@+id/photo_imageview"
                 android:layout_width="match_parent"
                 android:layout_height="210dp"
-                android:scaleType="fitXY"/>
+                android:scaleType="fitXY"
+                android:contentDescription="@string/a11y_details_photo"
+                android:nextFocusDown="@id/caption_textview"/>
 
             <!-- Caption -->
             <TextView
@@ -33,7 +35,10 @@
                 android:textSize="12sp"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                android:paddingTop="4dp"/>
+                android:paddingTop="4dp"
+                android:contentDescription="@string/a11y_details_caption"
+                android:nextFocusUp="@id/photo_imageview"
+                android:nextFocusDown="@id/headline_textview"/>
 
             <!-- Headline -->
             <TextView
@@ -42,7 +47,10 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-condensed"
                 android:textSize="18sp"
-                android:padding="16dp"/>
+                android:padding="16dp"
+                android:contentDescription="@string/a11y_headline"
+                android:nextFocusUp="@id/caption_textview"
+                android:nextFocusDown="@id/author_textview"/>
 
             <!-- Author -->
             <TextView
@@ -52,7 +60,10 @@
                 android:fontFamily="sans-serif-condensed"
                 android:textSize="12sp"
                 android:paddingLeft="16dp"
-                android:paddingRight="16dp"/>
+                android:paddingRight="16dp"
+                android:contentDescription="@string/a11y_details_author"
+                android:nextFocusUp="@id/headline_textview"
+                android:nextFocusDown="@id/date_textview"/>
 
             <!-- Date -->
             <TextView
@@ -63,7 +74,10 @@
                 android:textSize="12sp"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                android:paddingTop="4dp"/>
+                android:paddingTop="4dp"
+                android:contentDescription="@string/a11y_details_date"
+                android:nextFocusUp="@id/author_textview"
+                android:nextFocusDown="@id/summary_textview"/>
 
             <!-- Summary -->
             <TextView
@@ -72,7 +86,10 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-condensed"
                 android:textSize="14sp"
-                android:padding="16dp"/>
+                android:padding="16dp"
+                android:contentDescription="@string/a11y_details_summary"
+                android:nextFocusUp="@id/date_textview"
+                android:nextFocusDown="@id/mark_favorite_button"/>
 
             <!-- Mark As Favorite and Read More -->
             <LinearLayout
@@ -89,7 +106,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/label_mark_as_favorite"
-                    android:enabled="false"/>
+                    android:enabled="false"
+                    android:contentDescription="@string/label_mark_as_favorite"
+                    android:nextFocusUp="@id/summary_textview"
+                    android:nextFocusRight="@id/read_more_button"/>
 
                 <!-- Read More -->
                 <Button
@@ -97,12 +117,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/label_read_more"
-                    android:enabled="true"/>
+                    android:enabled="true"
+                    android:contentDescription="@string/label_read_more"
+                    android:nextFocusLeft="@id/mark_favorite_button"
+                    android:nextFocusRight="@id/share_fab"/>
 
             </LinearLayout>
-
         </LinearLayout>
-
     </ScrollView>
 
     <!-- Share FAB -->
@@ -115,7 +136,9 @@
         app:fabSize="normal"
         app:elevation="6dp"
         app:pressedTranslationZ="12dp"
-        app:borderWidth="0dp"/>
+        app:borderWidth="0dp"
+        android:contentDescription="@string/a11y_share_button"
+        android:nextFocusLeft="@id/read_more_button"/>
 
 </FrameLayout>
 
