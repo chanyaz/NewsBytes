@@ -7,32 +7,20 @@
     tools:context="com.ravi.apps.android.newsbytes.HeadlinesFragment"
     android:layoutDirection="locale">
 
-    <com.google.android.gms.ads.AdView
-        android:id="@+id/adview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        ads:adSize="SMART_BANNER"
-        ads:adUnitId="@string/banner_ad_unit_id"
-        android:nextFocusUp="@+id/headline_framelayout">
-    </com.google.android.gms.ads.AdView>
-
     <FrameLayout
         android:id="@+id/headline_framelayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/adview"
-        android:layout_marginBottom="16dp"
-        android:nextFocusDown="@id/adview">
+        android:layout_above="@+id/spacer"
+        android:nextFocusDown="@+id/adview">
 
         <!-- Displays a list of news headlines and thumbnails -->
         <ListView
             android:id="@+id/headlines_listview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:divider="@android:color/darker_gray"
-            android:dividerHeight="2sp">
+            android:divider="@color/grey"
+            android:dividerHeight="0.5sp">
         </ListView>
 
         <!-- Displays status message in empty list -->
@@ -49,5 +37,25 @@
         </TextView>
 
     </FrameLayout>
+
+    <View
+        android:id="@+id/spacer"
+        android:layout_width="match_parent"
+        android:layout_height="16dp"
+        android:layout_above="@+id/adview"
+        android:background="@color/colorPrimary"/>
+
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        ads:adSize="SMART_BANNER"
+        ads:adUnitId="@string/banner_ad_unit_id"
+        android:nextFocusUp="@+id/headline_framelayout">
+    </com.google.android.gms.ads.AdView>
+
 </RelativeLayout>
+
 

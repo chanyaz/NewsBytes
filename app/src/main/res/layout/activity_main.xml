@@ -1,10 +1,27 @@
 <!-- One pane layout primarily targeting phones -->
 
-<!-- News headlines fragment -->
-<fragment xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/fragment_headlines"
-    android:name="com.ravi.apps.android.newsbytes.HeadlinesFragment"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:layout="@layout/fragment_headlines"/>
+    android:layout_height="match_parent">
+
+    <!-- Toolbar -->
+    <include
+        android:id="@+id/tool_bar"
+        layout="@layout/tool_bar">
+    </include>
+
+    <!-- News headlines -->
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/fragment_headlines"
+        android:name="com.ravi.apps.android.newsbytes.HeadlinesFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout="@layout/fragment_headlines"
+        android:layout_below="@+id/tool_bar"/>
+
+</RelativeLayout>
+
+

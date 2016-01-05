@@ -1,25 +1,42 @@
 <!-- Two pane layout primarily targeting tablets and large-screen phones -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:baselineAligned="false"
-    android:divider="?android:attr/dividerVertical">
+    android:layout_height="match_parent">
 
-    <!-- News headlines fragment -->
-    <fragment
-        android:id="@+id/fragment_headlines"
-        android:name="com.ravi.apps.android.newsbytes.HeadlinesFragment"
-        android:layout_width="0dp"
+    <!-- Toolbar -->
+    <include
+        android:id="@+id/tool_bar"
+        layout="@layout/tool_bar">
+    </include>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"/>
+        android:orientation="horizontal"
+        android:baselineAligned="false"
+        android:divider="?android:attr/dividerVertical"
+        android:layout_below="@+id/tool_bar">
 
-    <!-- Contains the news details fragment -->
-    <FrameLayout
-        android:id="@+id/news_details_container"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1" />
+        <!-- News headlines -->
+        <fragment
+            android:id="@+id/fragment_headlines"
+            android:name="com.ravi.apps.android.newsbytes.HeadlinesFragment"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
 
-</LinearLayout>
+        <!-- News details -->
+        <FrameLayout
+            android:id="@+id/news_details_container"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+
+</RelativeLayout>
+
+
