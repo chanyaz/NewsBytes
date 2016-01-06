@@ -16,11 +16,11 @@
 
 package com.ravi.apps.android.newsbytes;
 
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -28,6 +28,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.ravi.apps.android.newsbytes.sync.NewsSyncAdapter;
 
 public class MainActivity extends AppCompatActivity
@@ -37,17 +39,26 @@ public class MainActivity extends AppCompatActivity
     // Tag for logging messages.
     public static final String LOG_TAG = MainActivity.class.getSimpleName();
 
-    // Holds whether the main activity layout contains two panes.
-    private boolean mIsTwoPaneMode;
-
     // Flag indicating whether widget list item was clicked.
     public static boolean isWidgetItemClicked = false;
 
     // Position of the widget list item that was clicked.
     public static int widgetItemClickedPosition = ListView.INVALID_POSITION;
 
+    // Holds whether the main activity layout contains two panes.
+    private boolean mIsTwoPaneMode;
+
     // Toolbar.
     private Toolbar mToolbar;
+
+    // Key to save preference changed status flag.
+    private static final String PREFERENCE_CHANGED_KEY = "preference_changed_key";
+
+    // Flag indicating whether news category preference changed.
+    private boolean mHasPreferenceChanged = false;
+
+    // Ad view displaying banner ad.
+    private AdView mAdView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,15 +68,22 @@ public class MainActivity extends AppCompatActivity
         // Start analytics tracking.
         ((NewsApplication) getApplication()).startTracking();
 
-        // Get the toolbar and set it as the action bar.
-        mToolbar = (Toolbar) findViewById(R.id.tool_bar);
-        setSupportActionBar(mToolbar);
-
         // Set default values only the first time.
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
         // Register to receive events upon any changes to the shared preferences.
         PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this);
+
+        // Get the toolbar and set it as the action bar.
+        mToolbar = (Toolbar) findViewById(R.id.tool_bar);
+        setSupportActionBar(mToolbar);
+
+        // Get the banner ad view.
+        mAdView = (AdView) findViewById(R.id.adview);
+
+        // Create an ad request and load it into the ad view.
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
 
         // Check if the layout has two panes and set the flag accordingly.
         if(findViewById(R.id.news_details_container) != null) {
@@ -78,7 +96,7 @@ public class MainActivity extends AppCompatActivity
         }
 
         // Check if it was a configuration change.
-        if (savedInstanceState == null) {
+        if(savedInstanceState == null) {
             // Check if the widget list item was clicked.
             Intent intent = getIntent();
             if (intent != null
@@ -96,6 +114,12 @@ public class MainActivity extends AppCompatActivity
                 Log.d(LOG_TAG, getString(R.string.log_on_create_widget_item_position)
                         + ((Integer) widgetItemClickedPosition).toString());
             }
+        } else {
+            // Check if it's in two pane mode and the preference changed status was saved.
+            if(mIsTwoPaneMode && savedInstanceState.containsKey(PREFERENCE_CHANGED_KEY)) {
+                // Extract preference changed status.
+                mHasPreferenceChanged = savedInstanceState.getBoolean(PREFERENCE_CHANGED_KEY);
+            }
         }
 
         // Initialize the sync adapter.
@@ -111,9 +135,12 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        // Check if it's in two-pane mode.
-        if(mIsTwoPaneMode) {
+    protected void onResume() {
+        super.onResume();
+
+        // Check if it's in two pane mode and preference has been changed.
+        // If so, find and remove the details fragment.
+        if(mIsTwoPaneMode && mHasPreferenceChanged) {
             // Get the fragment manager.
             FragmentManager fragmentManager = getFragmentManager();
 
@@ -127,6 +154,17 @@ public class MainActivity extends AppCompatActivity
                         .remove(detailsFragment)
                         .commit();
             }
+
+            // Reset the preference changed flag.
+            mHasPreferenceChanged = false;
+        }
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        // Set the preference changed flag if it's in two pane mode.
+        if(mIsTwoPaneMode) {
+            mHasPreferenceChanged = true;
         }
 
         // Check the current news category preference.
@@ -157,6 +195,8 @@ public class MainActivity extends AppCompatActivity
 
             // Add the fragment onto the container.
             getFragmentManager().beginTransaction()
+                    .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out,
+                            android.R.animator.fade_in, android.R.animator.fade_out)
                     .replace(R.id.news_details_container, detailsFragment, DetailsFragment.DETAILS_FRAGMENT_TAG)
                     .commit();
         } else {

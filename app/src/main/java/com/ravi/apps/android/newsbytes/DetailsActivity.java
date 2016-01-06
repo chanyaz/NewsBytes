@@ -28,6 +28,11 @@ public class DetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Start animation.
+        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+
+        // Set the content view.
         setContentView(R.layout.activity_details);
 
         // Get the toolbar and set it as the action bar.
@@ -52,5 +57,13 @@ public class DetailsActivity extends AppCompatActivity {
                     .add(R.id.news_details_container, detailsFragment, DetailsFragment.DETAILS_FRAGMENT_TAG)
                     .commit();
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        // Start animation.
+        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
     }
 }

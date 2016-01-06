@@ -16,6 +16,8 @@
         android:id="@+id/thumbnail_imageview"
         android:layout_width="75dp"
         android:layout_height="75dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:scaleType="centerCrop"/>
 
     <!-- Headlines -->
@@ -23,9 +25,14 @@
         android:id="@+id/main_headlines_textview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-condensed"
+        android:fontFamily="sans-serif"
+        android:textStyle="bold"
         android:textSize="16sp"
+        android:textColor="@color/black"
         android:contentDescription="@string/a11y_headline"
-        android:textDirection="locale"/>
+        android:textDirection="locale"
+        android:paddingStart="8dp"
+        android:maxLines="3"
+        android:ellipsize="end"/>
 
 </LinearLayout>

@@ -28,6 +28,11 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Start animation.
+        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+
+        // Set the content view.
         setContentView(R.layout.activity_settings);
 
         // Get the toolbar and set it as the action bar.
@@ -40,5 +45,13 @@ public class SettingsActivity extends AppCompatActivity {
                     .add(R.id.settings_container, new SettingsFragment())
                     .commit();
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        // Start animation.
+        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
     }
 }
