@@ -48,7 +48,8 @@ import java.io.ByteArrayOutputStream;
 /**
  * Displays detailed information about the news story.
  */
-public class DetailsFragment extends Fragment implements View.OnClickListener {
+public class DetailsFragment extends Fragment
+        implements View.OnClickListener, ParallaxScrollView.OnScrollChangedListener {
 
     // Tag for logging messages.
     private static final String LOG_TAG = DetailsFragment.class.getSimpleName();
@@ -68,7 +69,11 @@ public class DetailsFragment extends Fragment implements View.OnClickListener {
     // News object containing the details about this news story.
     private News mNews;
 
+    // Parallax scroll view.
+    private ParallaxScrollView mParallaxScrollView;
+
     // All the views in this fragment.
+    private View mPhotoContainer;
     private ImageView mPhoto;
     private TextView mCaption;
     private TextView mHeadline;
@@ -120,6 +125,9 @@ public class DetailsFragment extends Fragment implements View.OnClickListener {
         mMarkAsFav.setOnClickListener(this);
         mReadMore.setOnClickListener(this);
         mShare.setOnClickListener(this);
+
+        // Set the scroll changed listener.
+        mParallaxScrollView.setOnScrollChangedListener(this);
 
         // Bind data to all the views.
         bindDataToView();
@@ -241,6 +249,15 @@ public class DetailsFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    @Override
+    public void onScrollChanged(int deltaX, int deltaY) {
+        // Get the scroll distance on y-axis.
+        int scrollY = mParallaxScrollView.getScrollY();
+
+        // Add the parallax effect.
+        mPhotoContainer.setTranslationY(scrollY * 0.5f);
+    }
+
     /**
      * Provides target for Picasso that loads the thumbnail image from the url
      * and extracts and stores the thumbnail image byte array.
@@ -309,6 +326,8 @@ public class DetailsFragment extends Fragment implements View.OnClickListener {
      * Sets the references to all the views.
      */
     private void setReferencesToViews(View rootView) {
+        mParallaxScrollView = (ParallaxScrollView) rootView.findViewById(R.id.parallax_scroll_view);
+        mPhotoContainer = (View) rootView.findViewById(R.id.photo_container);
         mPhoto = (ImageView) rootView.findViewById(R.id.photo_imageview);
         mCaption = (TextView) rootView.findViewById(R.id.caption_textview);
         mHeadline = (TextView) rootView.findViewById(R.id.headline_textview);

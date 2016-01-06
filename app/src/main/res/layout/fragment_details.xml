@@ -5,9 +5,10 @@
     android:layout_height="match_parent"
     android:layoutDirection="locale">
 
-    <ScrollView
+    <com.ravi.apps.android.newsbytes.ParallaxScrollView
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/parallax_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -18,14 +19,23 @@
             android:layout_width="match_parent"
             android:orientation="vertical">
 
-            <!-- Photo -->
-            <ImageView
-                android:id="@+id/photo_imageview"
+            <!-- Photo container -->
+            <FrameLayout
+                android:id="@+id/photo_container"
                 android:layout_width="match_parent"
-                android:layout_height="210dp"
-                android:scaleType="fitXY"
-                android:contentDescription="@string/a11y_details_photo"
-                android:nextFocusDown="@+id/caption_textview"/>
+                android:layout_height="220dp"
+                android:elevation="2dp">
+
+                <!-- Photo -->
+                <ImageView
+                    android:id="@+id/photo_imageview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:contentDescription="@string/a11y_details_photo"
+                    android:nextFocusDown="@+id/caption_textview"/>
+
+            </FrameLayout>
 
             <!-- Caption -->
             <TextView
@@ -35,7 +45,9 @@
                 android:fontFamily="sans-serif-condensed"
                 android:textSize="12sp"
                 android:paddingLeft="16dp"
+                android:paddingStart="16dp"
                 android:paddingRight="16dp"
+                android:paddingEnd="16dp"
                 android:paddingTop="4dp"
                 android:contentDescription="@string/a11y_details_caption"
                 android:nextFocusUp="@+id/photo_imageview"
@@ -47,8 +59,10 @@
                 android:id="@+id/headline_textview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-condensed"
-                android:textSize="18sp"
+                android:fontFamily="sans-serif"
+                android:textStyle="bold"
+                android:textSize="24sp"
+                android:textColor="@color/black"
                 android:padding="16dp"
                 android:contentDescription="@string/a11y_headline"
                 android:nextFocusUp="@+id/caption_textview"
@@ -90,7 +104,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-condensed"
-                android:textSize="14sp"
+                android:textSize="16sp"
                 android:padding="16dp"
                 android:contentDescription="@string/a11y_details_summary"
                 android:nextFocusUp="@+id/date_textview"
@@ -130,7 +144,8 @@
 
             </LinearLayout>
         </LinearLayout>
-    </ScrollView>
+
+    </com.ravi.apps.android.newsbytes.ParallaxScrollView>
 
     <!-- Share FAB -->
     <android.support.design.widget.FloatingActionButton
