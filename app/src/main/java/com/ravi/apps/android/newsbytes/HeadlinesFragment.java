@@ -21,9 +21,9 @@ import android.app.LoaderManager;
 import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.transition.TransitionInflater;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,8 +34,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.ravi.apps.android.newsbytes.data.NewsContract.NewsEntry;
-
-import java.io.ByteArrayOutputStream;
 
 /**
  * Displays a list of news story headlines and thumbnails retrieved from the New York Times server.
@@ -256,16 +254,14 @@ public class HeadlinesFragment extends Fragment
                 // Set list position to widget item click position.
                 if(MainActivity.widgetItemClickedPosition != ListView.INVALID_POSITION) {
                     mListPosition = MainActivity.widgetItemClickedPosition;
+                    mListView.setSelection(mListPosition);
                 }
 
-                // Get the cursor at the click position.
-                Cursor cursor = (Cursor) mHeadlinesAdapter.getItem(mListPosition);
-
-                // Create the news object to pass back to the parent activity.
-                News news = buildNewsObject(cursor);
-
-                // Notify the parent activity that the user clicked a headline and pass on the news details.
-                ((OnHeadlineSelectedListener) getActivity()).onHeadlineSelected(news);
+                // Invoke the list item click handler.
+                onItemClick(mListView,
+                        mHeadlinesAdapter.getView(mListPosition, null, mListView),
+                        mListPosition,
+                        mHeadlinesAdapter.getItemId(mListPosition));
 
                 // Reset the widget list item clicked flag and list position.
                 MainActivity.isWidgetItemClicked = false;
@@ -299,17 +295,38 @@ public class HeadlinesFragment extends Fragment
         // Create the news object to pass back to the parent activity.
         News news = buildNewsObject(newsCursor);
 
-        // Get the thumbnail image view to extract bitmap for saving into news object.
-        ImageView thumbnail = (ImageView) view.findViewById(R.id.thumbnail_imageview);
+        // Get the thumbnail image view to extract bitmap for saving into news object and for
+        // using in the shared element transition.
+        ImageView thumbnailView = (ImageView) view.findViewById(R.id.thumbnail_imageview);
+
+        // Get the headline text view for using in the shared element transition.
+        TextView headlineView = (TextView) view.findViewById(R.id.main_headlines_textview);
+
+        // Hold the dynamically generated transition names.
+        String thumbnailTransitionName = null;
+        String headlineTransitionName = null;
 
         // Extract bitmap from thumbnail image view and convert it to byte array.
-        byte[] thumbnailByteArray = convertToByteArray(thumbnail);
+        byte[] thumbnailByteArray = Utility.convertToByteArray(thumbnailView);
 
         // Set the thumbnail byte array into the news object.
         news.setThumbnailByteArray(thumbnailByteArray);
 
+        // Shared element transition for devices running lollipop or above.
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            setSharedElementReturnTransition(TransitionInflater.from(getActivity())
+                    .inflateTransition(R.transition.change_image_transform));
+            setExitTransition(TransitionInflater.from(getActivity())
+                    .inflateTransition(android.R.transition.fade));
+
+            // Extract the transition names.
+            thumbnailTransitionName = thumbnailView.getTransitionName();
+            headlineTransitionName = headlineView.getTransitionName();
+        }
+
         // Notify the parent activity that the user clicked a headline and pass on the news details.
-        ((OnHeadlineSelectedListener) getActivity()).onHeadlineSelected(news);
+        ((OnHeadlineSelectedListener) getActivity()).onHeadlineSelected(
+                news, thumbnailView, thumbnailTransitionName, headlineView, headlineTransitionName);
     }
 
     /**
@@ -317,7 +334,8 @@ public class HeadlinesFragment extends Fragment
      * notifications from fragment whenever the user selects/taps on a news headline.
      */
     public interface OnHeadlineSelectedListener {
-        void onHeadlineSelected(News news);
+        void onHeadlineSelected(News news, ImageView thumbnailView, String thumbnailTransition,
+                                TextView headlineView, String headlineTransition);
     }
 
     /**
@@ -340,29 +358,5 @@ public class HeadlinesFragment extends Fragment
                 cursor.getString(COL_CAPTION_PHOTO),
                 cursor.getString(COL_COPYRIGHT_PHOTO),
                 cursor.getInt(COL_IS_FAVORITE));
-    }
-
-    /**
-     * Converts and returns the corresponding byte array for the bitmap
-     * linked to the image view passed in.
-     */
-    private byte[] convertToByteArray(ImageView imageView) {
-        // Check if image view is valid and has associated drawable. If not return null.
-        if(imageView == null || imageView.getDrawable() == null) {
-            return null;
-        }
-
-        // Get bitmap from the image view.
-        Bitmap bitmap = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
-
-        // Convert bitmap into byte array.
-        byte[] thumbnailByteArray = null;
-        if(bitmap != null) {
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-            thumbnailByteArray = stream.toByteArray();
-        }
-
-        return thumbnailByteArray;
     }
 }

@@ -20,6 +20,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.support.v4.widget.CursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +34,10 @@ import com.squareup.picasso.Picasso;
  * Cursor adapter storing the news story data.
  */
 public class HeadlinesAdapter extends CursorAdapter {
+
+    // Keys for the dynamically generated transition names.
+    public static final String THUMBNAIL_TRANSITION_NAME = "thumbnail_transition_name";
+    public static final String HEADLINE_TRANSITION_NAME = "headline_transition_name";
 
     // Cache of the child views for a headlines list item.
     public static class ViewHolder {
@@ -113,6 +118,12 @@ public class HeadlinesAdapter extends CursorAdapter {
             viewHolder.headlineView.setContentDescription(headline);
         } else {
             // TODO: Display headline not available message.
+        }
+
+        // Generate transition names for shared elements for devices running lollipop or above.
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            viewHolder.thumbnailView.setTransitionName(THUMBNAIL_TRANSITION_NAME + cursor.getPosition());
+            viewHolder.headlineView.setTransitionName(HEADLINE_TRANSITION_NAME + cursor.getPosition());
         }
     }
 }

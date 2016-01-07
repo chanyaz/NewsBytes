@@ -19,14 +19,19 @@ package com.ravi.apps.android.newsbytes;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.transition.TransitionInflater;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -38,6 +43,14 @@ public class MainActivity extends AppCompatActivity
 
     // Tag for logging messages.
     public static final String LOG_TAG = MainActivity.class.getSimpleName();
+
+    // Keys for the shared element transition.
+    public static final String IMAGE_XPOS = "image_xpos";
+    public static final String IMAGE_YPOS = "image_ypos";
+    public static final String IMAGE = "image";
+    public static final String TEXT_XPOS = "text_xpos";
+    public static final String TEXT_YPOS = "text_ypos";
+    public static final String TEXT = "text";
 
     // Flag indicating whether widget list item was clicked.
     public static boolean isWidgetItemClicked = false;
@@ -180,7 +193,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onHeadlineSelected(News news) {
+    public void onHeadlineSelected(News news, ImageView thumbnailView, String thumbnailTransition,
+                                   TextView headlineView, String headlineTransition) {
         // Check if it's in two pane mode.
         if(mIsTwoPaneMode) {
             // Package the parcelable news data into the arguments bundle.
@@ -190,21 +204,63 @@ public class MainActivity extends AppCompatActivity
             // Create the details fragment object.
             DetailsFragment detailsFragment = new DetailsFragment();
 
-            // Set arguments containing news details.
-            detailsFragment.setArguments(arguments);
+            // Shared element transition - check if device is running on lollipop or above
+            // and if ALL of the required parameters for the shared element transition are available.
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
+                    && thumbnailView != null && thumbnailTransition != null
+                    && headlineView != null && headlineTransition != null) {
+                  // Set the shared element transition.
+                detailsFragment.setSharedElementEnterTransition(TransitionInflater.from(this).inflateTransition(R.transition.change_image_transform));
+                detailsFragment.setEnterTransition(TransitionInflater.from(this).inflateTransition(android.R.transition.fade));
 
-            // Add the fragment onto the container.
-            getFragmentManager().beginTransaction()
-                    .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out,
-                            android.R.animator.fade_in, android.R.animator.fade_out)
-                    .replace(R.id.news_details_container, detailsFragment, DetailsFragment.DETAILS_FRAGMENT_TAG)
-                    .commit();
+                // Add the transition names into the bundle.
+                arguments.putString(HeadlinesAdapter.THUMBNAIL_TRANSITION_NAME, thumbnailTransition);
+                arguments.putString(HeadlinesAdapter.HEADLINE_TRANSITION_NAME, headlineTransition);
+
+                // Set arguments containing news details.
+                detailsFragment.setArguments(arguments);
+
+                // Set the transition names.
+                ViewCompat.setTransitionName(thumbnailView, thumbnailTransition);
+                ViewCompat.setTransitionName(headlineView, headlineTransition);
+
+                // Add the fragment onto the container.
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.news_details_container, detailsFragment, DetailsFragment.DETAILS_FRAGMENT_TAG)
+                        .addSharedElement(thumbnailView, thumbnailTransition)
+                        .addSharedElement(headlineView, headlineTransition)
+                        .commit();
+            } else {    // For pre-lollipop devices.
+                // Set arguments containing news details.
+                detailsFragment.setArguments(arguments);
+
+                // Add the fragment onto the container.
+                getFragmentManager().beginTransaction()
+                        .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out,
+                                android.R.animator.fade_in, android.R.animator.fade_out)
+                        .replace(R.id.news_details_container, detailsFragment, DetailsFragment.DETAILS_FRAGMENT_TAG)
+                        .commit();
+            }
         } else {
             // Create intent to launch details activity.
             Intent intent = new Intent(this, DetailsActivity.class);
 
             // Add news details into extra.
             intent.putExtra(DetailsFragment.NEWS_DETAILS, news);
+
+            // Shared element transition - check if device is running on lollipop or above
+            // and if ALL of the required parameters for the shared element transition are available.
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
+                    && thumbnailView != null && thumbnailTransition != null
+                    && headlineView != null && headlineTransition != null) {
+                // Add the transition names into the intent extra.
+                intent.putExtra(HeadlinesAdapter.THUMBNAIL_TRANSITION_NAME, thumbnailTransition);
+                intent.putExtra(HeadlinesAdapter.HEADLINE_TRANSITION_NAME, headlineTransition);
+
+                // Add the essential attributes of the shared element views into the intent extra.
+                addThumbnailDetailsToIntent(thumbnailView, intent);
+                addHeadlineDetailsToIntent(headlineView, intent);
+            }
 
             // Start details activity.
             startActivity(intent);
@@ -233,5 +289,46 @@ public class MainActivity extends AppCompatActivity
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Adds the thumbnail details into the intent extras.
+     */
+    private void addThumbnailDetailsToIntent(ImageView imageView, Intent intent) {
+        // Get the thumbnail position.
+        int[] loc = new int[2];
+        imageView.getLocationOnScreen(loc);
+        float xPos = loc[0];
+        float yPos = loc[1];
+
+        // Get the thumbnail image as a byte array.
+        byte[] imageByteArray = Utility.convertToByteArray(imageView);
+        if(imageByteArray == null) {
+            imageByteArray = new byte[0];
+        }
+
+        // Add details into intent extras.
+        intent.putExtra(IMAGE_XPOS, xPos);
+        intent.putExtra(IMAGE_YPOS, yPos);
+        intent.putExtra(IMAGE, imageByteArray);
+    }
+
+    /**
+     * Adds the headline details into the intent extras.
+     */
+    private void addHeadlineDetailsToIntent(TextView textView, Intent intent) {
+        // Get the headline position.
+        int[] location = new int[2];
+        textView.getLocationOnScreen(location);
+        float xPos = location[0];
+        float yPos = location[1];
+
+        // Get the text.
+        String text = (String) textView.getText();
+
+        // Add details into intent extras.
+        intent.putExtra(TEXT_XPOS, xPos);
+        intent.putExtra(TEXT_YPOS, yPos);
+        intent.putExtra(TEXT, text);
     }
 }

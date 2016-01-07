@@ -24,6 +24,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ShareCompat;
@@ -93,6 +94,10 @@ public class DetailsFragment extends Fragment
     // Reference to share action provider.
     private ShareActionProvider mShareActionProvider;
 
+    // Thumbnail and headline transition names.
+    private String mThumbnailTransitionName;
+    private String mHeadlineTransitionName;
+
     public DetailsFragment() {
         setHasOptionsMenu(true);
     }
@@ -108,6 +113,15 @@ public class DetailsFragment extends Fragment
         if(arguments != null) {
             // Extract the news object.
             mNews = (News) arguments.getParcelable(NEWS_DETAILS);
+
+            // Extract the shared element transition names ONLY if it's lollipop or above
+            // AND bundle contains the required data.
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
+                    && arguments.containsKey(HeadlinesAdapter.THUMBNAIL_TRANSITION_NAME)
+                    && arguments.containsKey(HeadlinesAdapter.HEADLINE_TRANSITION_NAME)) {
+                mThumbnailTransitionName = arguments.getString(HeadlinesAdapter.THUMBNAIL_TRANSITION_NAME);
+                mHeadlineTransitionName = arguments.getString(HeadlinesAdapter.HEADLINE_TRANSITION_NAME);
+            }
         }
 
         // Check if it was a configuration change.
@@ -337,6 +351,16 @@ public class DetailsFragment extends Fragment
         mMarkAsFav = (Button) rootView.findViewById(R.id.mark_favorite_button);
         mReadMore = (Button) rootView.findViewById(R.id.read_more_button);
         mShare = (FloatingActionButton) rootView.findViewById(R.id.share_fab);
+
+        // Set the transition names onto the respective views.
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if(mThumbnailTransitionName != null && !mThumbnailTransitionName.isEmpty()) {
+                mPhoto.setTransitionName(mThumbnailTransitionName);
+            }
+            if(mHeadlineTransitionName != null && !mHeadlineTransitionName.isEmpty()) {
+                mHeadline.setTransitionName(mHeadlineTransitionName);
+            }
+        }
     }
 
     /**

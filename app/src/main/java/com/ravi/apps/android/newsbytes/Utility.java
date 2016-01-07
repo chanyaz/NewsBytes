@@ -19,7 +19,12 @@ package com.ravi.apps.android.newsbytes;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.preference.PreferenceManager;
+import android.widget.ImageView;
+
+import java.io.ByteArrayOutputStream;
 
 /**
  * Provides various utility methods.
@@ -113,5 +118,29 @@ public class Utility {
         }
 
         return result.toString();
+    }
+
+    /**
+     * Converts and returns the corresponding byte array for the bitmap
+     * linked to the image view passed in.
+     */
+    public static byte[] convertToByteArray(ImageView imageView) {
+        // Check if image view is valid and has associated drawable. If not return null.
+        if(imageView == null || imageView.getDrawable() == null) {
+            return null;
+        }
+
+        // Get bitmap from the image view.
+        Bitmap bitmap = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
+
+        // Convert bitmap into byte array.
+        byte[] thumbnailByteArray = null;
+        if(bitmap != null) {
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            thumbnailByteArray = stream.toByteArray();
+        }
+
+        return thumbnailByteArray;
     }
 }

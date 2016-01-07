@@ -138,6 +138,9 @@
     <!-- Descending sort order for the query -->
     <string name="descending_sort_order" translatable="false">" DESC"</string>
 
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 
 
 
