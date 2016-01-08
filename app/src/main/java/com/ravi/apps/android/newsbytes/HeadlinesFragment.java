@@ -203,6 +203,9 @@ public class HeadlinesFragment extends Fragment
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        // Show the data loading message to user.
+        mEmptyListView.setText(getString(R.string.msg_status_loading));
+
         // Sort order for the query.
         final String sortOrder = NewsEntry.COLUMN_DATE +
                 getActivity().getString(R.string.descending_sort_order);
@@ -236,11 +239,9 @@ public class HeadlinesFragment extends Fragment
         if(data != null) {
             // Check if the cursor is empty.
             if(data.moveToFirst() == false) {
-                Log.d(LOG_TAG, getActivity().getString(R.string.log_on_load_finished_empty));
-
-                // TODO: Show error message.
-                // Display appropriate status message to user and return.
-//                mEmptyListView.setText(getString(R.string.msg_err_no_favorites));
+                // Display and log message.
+                mEmptyListView.setText(getString(R.string.msg_empty_news_list));
+                Log.d(LOG_TAG, getString(R.string.log_on_load_finished_empty));
                 return;
             }
 
@@ -273,11 +274,9 @@ public class HeadlinesFragment extends Fragment
                 mListView.setSelection(mListPosition);
             }
         } else {
+            // Display and log message.
+            mEmptyListView.setText(getString(R.string.msg_empty_news_list));
             Log.d(LOG_TAG, getActivity().getString(R.string.log_on_load_finished_null));
-
-            // TODO: Show error message.
-            // Display appropriate error message to user.
-//            mEmptyListView.setText(getString(R.string.msg_err_fetch_favorites));
         }
     }
 

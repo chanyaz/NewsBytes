@@ -128,9 +128,13 @@ public class NewsWidgetRemoteViewsFactory implements RemoteViewsService.RemoteVi
         // Check if headline is non null and non empty. If so, set headline & content description.
         if(headline != null && !headline.isEmpty()) {
             remoteViews.setTextViewText(R.id.widget_headline, headline);
-            remoteViews.setContentDescription(R.id.widget_headline,headline);
+            remoteViews.setContentDescription(R.id.widget_headline, headline);
         } else {
-            // TODO: Display headline not available message.
+            // Display headline not available message.
+            remoteViews.setTextViewText(R.id.widget_headline,
+                    mContext.getString(R.string.msg_err_no_headline));
+            remoteViews.setContentDescription(R.id.widget_headline,
+                    mContext.getString(R.string.msg_err_no_headline));
         }
 
         // Create and set the fill in intent.

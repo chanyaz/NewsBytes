@@ -22,6 +22,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.support.v4.widget.CursorAdapter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +35,9 @@ import com.squareup.picasso.Picasso;
  * Cursor adapter storing the news story data.
  */
 public class HeadlinesAdapter extends CursorAdapter {
+
+    // Tag for logging messages.
+    private static final String LOG_TAG = HeadlinesAdapter.class.getSimpleName();
 
     // Keys for the dynamically generated transition names.
     public static final String THUMBNAIL_TRANSITION_NAME = "thumbnail_transition_name";
@@ -88,8 +92,9 @@ public class HeadlinesAdapter extends CursorAdapter {
                 viewHolder.thumbnailView.setImageBitmap(thumbnailBitmap);
                 viewHolder.thumbnailView.setScaleType(ImageView.ScaleType.FIT_XY);
             } else {
-                // Show thumbnail placeholder icon.
-                viewHolder.thumbnailView.setImageResource(R.drawable.ic_thumbnail_placeholder);
+                // Show thumbnail placeholder icon and log error message.
+                viewHolder.thumbnailView.setImageResource(R.drawable.thumbnail_placeholder);
+                Log.e(LOG_TAG, context.getString(R.string.msg_err_no_thumbnail));
             }
         } else {
             // Get the thumbnail uri.
@@ -103,12 +108,13 @@ public class HeadlinesAdapter extends CursorAdapter {
                 // Load the thumbnail into image view using Picasso.
                 Picasso.with(context)
                         .load(url)
-                        .placeholder(R.drawable.ic_thumbnail_placeholder)
+                        .placeholder(R.drawable.thumbnail_placeholder)
                         .fit()
                         .into(viewHolder.thumbnailView);
             } else {
-                // Show thumbnail placeholder icon.
-                viewHolder.thumbnailView.setImageResource(R.drawable.ic_thumbnail_placeholder);
+                // Show thumbnail placeholder icon and log error message.
+                viewHolder.thumbnailView.setImageResource(R.drawable.thumbnail_placeholder);
+                Log.e(LOG_TAG, context.getString(R.string.msg_err_no_thumbnail));
             }
         }
 
@@ -120,9 +126,10 @@ public class HeadlinesAdapter extends CursorAdapter {
             viewHolder.headlineView.setText(headline);
             viewHolder.headlineView.setContentDescription(headline);
         } else {
-            // Display headline not available message.
+            // Display headline not available message and log error message.
             viewHolder.headlineView.setText(context.getString(R.string.msg_err_no_headline));
             viewHolder.headlineView.setContentDescription(context.getString(R.string.msg_err_no_headline));
+            Log.e(LOG_TAG, context.getString(R.string.msg_err_no_headline));
         }
 
         // Generate transition names for shared elements for devices running lollipop or above.

@@ -30,6 +30,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ShareCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.ShareActionProvider;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -293,10 +294,15 @@ public class DetailsFragment extends Fragment
 
         @Override
         public void onPrepareLoad(Drawable placeHolderDrawable) {
+            // Show the placeholder.
+            mPhoto.setImageResource(R.drawable.thumbnail_placeholder);
         }
 
         @Override
         public void onBitmapFailed(Drawable errorDrawable) {
+            // Show the placeholder and log error message.
+            mPhoto.setImageResource(R.drawable.thumbnail_placeholder);
+            Log.e(LOG_TAG, getString(R.string.log_thumbnail_load_failed));
         }
     }
 
@@ -329,10 +335,20 @@ public class DetailsFragment extends Fragment
 
         @Override
         public void onPrepareLoad(Drawable placeHolderDrawable) {
+            // Show the placeholder.
+            mPhoto.setImageResource(R.drawable.photo_placeholder);
         }
 
         @Override
         public void onBitmapFailed(Drawable errorDrawable) {
+            // Show the placeholder and log error message.
+            mPhoto.setImageResource(R.drawable.photo_placeholder);
+            Log.e(LOG_TAG, getString(R.string.log_photo_load_failed));
+
+            // Now enable the mark as favorite button if this is not a favorite story.
+            if(mNews.getIsFavorite() == 0) {
+                mMarkAsFav.setEnabled(true);
+            }
         }
     }
 
@@ -382,7 +398,10 @@ public class DetailsFragment extends Fragment
                 mPhoto.setImageBitmap(photoBitmap);
                 mPhoto.setScaleType(ImageView.ScaleType.FIT_XY);
             } else {
-                // TODO: Set appropriate error meassage.
+                // TODO: Set photo placeholder.
+                // Show photo placeholder icon and log error message.
+                mPhoto.setImageResource(R.drawable.thumbnail_placeholder);
+                Log.e(LOG_TAG, getString(R.string.msg_err_no_photo));
             }
         } else {
             // Load the photo using picasso.
@@ -391,8 +410,10 @@ public class DetailsFragment extends Fragment
                         .load(mNews.getUriPhoto())
                         .into(mPhotoTarget);
             } else {
-                // TODO: Set appropriate error meassage.
-            }
+                // TODO: Set photo placeholder.
+                // Show photo placeholder icon and log error message.
+                mPhoto.setImageResource(R.drawable.thumbnail_placeholder);
+                Log.e(LOG_TAG, getString(R.string.msg_err_no_photo));            }
         }
 
         // Check if it's not a favorite and the thumbnail byte array was not generated in the
@@ -408,12 +429,31 @@ public class DetailsFragment extends Fragment
                     .into(mThumbnailTarget);
         }
 
-        // Set the caption.
+        // Compose a single string for both caption and copyright and set to the text view.
+        String caption = "";
+
+        // Get the caption.
         if(mNews.getCaptionPhoto() != null && !mNews.getCaptionPhoto().isEmpty()) {
-            mCaption.setText(mNews.getCaptionPhoto());
-            mCaption.setContentDescription(mNews.getCaptionPhoto());
+            caption = mNews.getCaptionPhoto();
+        }
+
+        // Get the copyright and append it to the caption.
+        if(mNews.getCopyrightPhoto() != null && !mNews.getCopyrightPhoto().isEmpty()) {
+            if(caption.isEmpty()) {
+                caption = getString(R.string.label_copyright) + mNews.getCopyrightPhoto();
+            } else {
+                caption += " " + getString(R.string.label_copyright) + mNews.getCopyrightPhoto();
+            }
+        }
+
+        // Check if the composed string is empty and set accordingly.
+        if(!caption.isEmpty()) {
+            mCaption.setText(caption);
+            mCaption.setContentDescription(caption);
         } else {
-            // TODO: Set appropriate error meassage.
+            // Caption and copyright are not available, remove the view and log error message.
+            ((ViewGroup) mCaption.getParent()).removeView(mCaption);
+            Log.e(LOG_TAG, getString(R.string.msg_err_no_caption_copyright));
         }
 
         // Set the headline.
@@ -421,7 +461,10 @@ public class DetailsFragment extends Fragment
             mHeadline.setText(mNews.getHeadline());
             mHeadline.setContentDescription(mNews.getHeadline());
         } else {
-            // TODO: Set appropriate error meassage.
+            // Headline is not available, show and log error message.
+            mHeadline.setText(getString(R.string.msg_err_no_headline));
+            mHeadline.setContentDescription(getString(R.string.msg_err_no_headline));
+            Log.e(LOG_TAG, getString(R.string.msg_err_no_headline));
         }
 
         // Set the author.
@@ -429,7 +472,9 @@ public class DetailsFragment extends Fragment
             mAuthor.setText(mNews.getAuthor());
             mAuthor.setContentDescription(mNews.getAuthor());
         } else {
-            // TODO: Set appropriate error message.
+            // Author is not available, remove the view and log error message.
+            ((ViewGroup) mAuthor.getParent()).removeView(mAuthor);
+            Log.e(LOG_TAG, getString(R.string.msg_err_no_author));
         }
 
         // Set the date.
@@ -437,7 +482,9 @@ public class DetailsFragment extends Fragment
             mDate.setText(mNews.getDate());
             mDate.setContentDescription(mNews.getDate());
         } else {
-            // TODO: Set appropriate error message.
+            // Date is not available, remove the view and log error message.
+            ((ViewGroup) mDate.getParent()).removeView(mDate);
+            Log.e(LOG_TAG, getString(R.string.msg_err_no_date));
         }
 
         // Set the summary.
@@ -445,7 +492,10 @@ public class DetailsFragment extends Fragment
             mSummary.setText(mNews.getSummary());
             mSummary.setContentDescription(mNews.getSummary());
         } else {
-            // TODO: Set appropriate error message.
+            // Summary is not available, show and log error message.
+            mSummary.setText(getString(R.string.msg_err_no_summary));
+            mSummary.setContentDescription(getString(R.string.msg_err_no_summary));
+            Log.e(LOG_TAG, getString(R.string.msg_err_no_summary));
         }
     }
 
@@ -471,9 +521,8 @@ public class DetailsFragment extends Fragment
         if(mNews.getHeadline() != null && !mNews.getHeadline().isEmpty()) {
             headline = mNews.getHeadline();
         } else {
-            // TODO: Show error message.
-            // Error message.
-            headline = "Some error message";
+            // Headline not available message.
+            headline = getString(R.string.msg_err_no_headline);
         }
 
         return headline;
@@ -488,9 +537,8 @@ public class DetailsFragment extends Fragment
         if(mNews.getSummary() != null && !mNews.getSummary().isEmpty()) {
             summary = mNews.getSummary();
         } else {
-            // TODO: Show error message.
-            // Error message.
-            summary = "Some error message";
+            // Summary not available message.
+            summary = getString(R.string.msg_err_no_summary);
         }
 
         return summary;
@@ -505,9 +553,8 @@ public class DetailsFragment extends Fragment
         if(mNews.getUriStory() != null && !mNews.getUriStory().isEmpty()) {
             uri = mNews.getUriStory();
         } else {
-            // TODO: Show error message.
-            // Error message.
-            uri = "Some error message";
+            // Uri not available message.
+            uri = getString(R.string.msg_err_no_uri);
         }
 
         return uri;

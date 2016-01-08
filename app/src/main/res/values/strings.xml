@@ -55,6 +55,8 @@
     <string name="label_read_more">READ\nMORE</string>
     <!-- Label for dialog ok button -->
     <string name="label_dialog_ok">OK</string>
+    <!-- Label for copyright -->
+    <string name="label_copyright">"Copyright: "</string>
 
     <!-- Accessibility -->
     <string name="a11y_headline">Headline</string>
@@ -85,10 +87,20 @@
     <string name="msg_err_no_uri">News story URI is not available</string>
     <!-- Message for the notification text -->
     <string name="msg_notification_text">Fresh news updates are available</string>
+    <!-- Message when no thumbnail -->
+    <string name="msg_err_no_thumbnail">No thumbnail available</string>
+    <!-- Message when no photo -->
+    <string name="msg_err_no_photo">No photo available</string>
     <!-- Message when no headline -->
     <string name="msg_err_no_headline">No headline available</string>
-    
-
+    <!-- Message when no caption or copyright -->
+    <string name="msg_err_no_caption_copyright">No caption or copyright available</string>
+    <!-- Message when no author -->
+    <string name="msg_err_no_author">No author available</string>
+    <!-- Message when no date -->
+    <string name="msg_err_no_date">No date available</string>
+    <!-- Message when no summary -->
+    <string name="msg_err_no_summary">No summary available</string>
 
     <!-- Log messages -->
     <string name="log_on_update">onUpdate</string>
@@ -111,6 +123,8 @@
     <string name="log_on_perform_sync_error">onPerformSync: Error:</string>
     <string name="log_on_load_finished_empty">onLoadFinished: Empty cursor</string>
     <string name="log_on_load_finished_null">onLoadFinished: Null cursor</string>
+    <string name="log_photo_load_failed">Failed to load photo</string>
+    <string name="log_thumbnail_load_failed">Failed to load thumbnail</string>
 
 
 
@@ -144,8 +158,7 @@
     <!-- Descending sort order for the query -->
     <string name="descending_sort_order" translatable="false">" DESC"</string>
 
-<!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 
 
 
