@@ -182,15 +182,14 @@ public class MainActivity extends AppCompatActivity
         }
 
         // Check the current news category preference.
-        if(Utility.getNewsCategoryPreference(this, key)
+        if(!Utility.getNewsCategoryPreference(this, key)
                 .equals(getString(R.string.pref_news_category_favorites))) {
-            // Current preference is favorites, inform widget to refresh it's data.
-            Utility.sendDataUpdatedBroadcast(this);
-        } else {
             // Current preference is not favorites, trigger an immediate sync.
-            // Once sync is completed the sync adapter will inform widget to refresh it's data.
             NewsSyncAdapter.syncImmediately(this);
         }
+
+        // Preference has changed, inform widget to refresh it's data.
+        Utility.sendDataUpdatedBroadcast(this);
     }
 
     @Override

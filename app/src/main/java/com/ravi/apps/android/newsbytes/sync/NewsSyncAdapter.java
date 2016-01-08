@@ -550,10 +550,9 @@ public class NewsSyncAdapter extends AbstractThreadedSyncAdapter {
         // Set the notification ticker.
         builder.setTicker(context.getString(R.string.msg_notification_text));
 
-        // TODO: Set some real icons please!!!
         // Set the notification large and small icons.
-        builder.setSmallIcon(R.drawable.ic_small_notification)
-                .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_large_notification));
+        builder.setSmallIcon(R.drawable.ic_notify_small)
+                .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_notify_large));
 
         // Send the notification.
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(
