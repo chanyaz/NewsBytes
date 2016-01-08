@@ -24,7 +24,6 @@ import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.transition.TransitionInflater;
-import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -69,8 +68,6 @@ public class DetailsActivity extends AppCompatActivity {
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
                     && bundle.containsKey(HeadlinesAdapter.THUMBNAIL_TRANSITION_NAME)
                     && bundle.containsKey(HeadlinesAdapter.HEADLINE_TRANSITION_NAME)) {
-                Log.d(LOG_TAG, "onCreate: Shared element transition");
-
                 // Create the starting views for the shared element transition.
                 createTransitionStartViews(bundle);
 
@@ -89,8 +86,6 @@ public class DetailsActivity extends AppCompatActivity {
                         .addSharedElement(mHeadlineView, bundle.getString(HeadlinesAdapter.HEADLINE_TRANSITION_NAME))
                         .commit();
             } else {
-                Log.d(LOG_TAG, "onCreate: Standard transition");
-
                 // Add the fragment onto the container.
                 getFragmentManager().beginTransaction()
                         .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out,

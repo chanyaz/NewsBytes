@@ -3,20 +3,19 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/widget_list_item"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="?android:attr/listPreferredItemHeight"
+    android:gravity="center_vertical">
 
     <TextView
         android:id="@+id/widget_headline"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="?android:attr/listPreferredItemHeight"
-        android:layout_gravity="center_vertical"
+        android:layout_height="match_parent"
         android:textSize="12sp"
-        android:textColor="@color/grey_700"
-        android:paddingLeft="8dp"
-        android:paddingStart="8dp"
-        android:paddingRight="8dp"
-        android:paddingEnd="8dp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:padding="16dp"
         android:contentDescription="@string/a11y_headline"
         android:textDirection="locale"/>
 

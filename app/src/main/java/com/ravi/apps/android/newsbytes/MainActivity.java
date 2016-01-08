@@ -90,6 +90,7 @@ public class MainActivity extends AppCompatActivity
         // Get the toolbar and set it as the action bar.
         mToolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(mToolbar);
+//        mToolbar.setTitleTextAppearance(this, Tex);
 
         // Get the banner ad view.
         mAdView = (AdView) findViewById(R.id.adview);

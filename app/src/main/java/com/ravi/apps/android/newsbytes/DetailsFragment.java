@@ -367,9 +367,6 @@ public class DetailsFragment extends Fragment
      * Binds the data to the corresponding views.
      */
     private void bindDataToView() {
-        // Set the title to reflect the current news category.
-        getActivity().setTitle(Utility.getNewsCategoryLabel(getActivity()));
-
         // Load photo into image view. If this is a favorite story,
         // then load from byte array else use Picasso.
         if(mNews.getIsFavorite() == 1) {
