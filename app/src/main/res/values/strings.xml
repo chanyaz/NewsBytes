@@ -80,11 +80,15 @@
     <!-- Title for the error dialog -->
     <string name="msg_err_dialog_title">Error</string>
     <!-- Message for the error dialog - no apps -->
-    <string name="msg_err_no_apps">There are no apps on the device that can perform this action.</string>
+    <string name="msg_err_no_apps">There are no apps on the device that can perform this action</string>
     <!-- Message for the error dialog - no uri -->
-    <string name="msg_err_no_uri">News story URI is not available.</string>
+    <string name="msg_err_no_uri">News story URI is not available</string>
     <!-- Message for the notification text -->
-    <string name="msg_notification_text">Fresh news updates are available.</string>
+    <string name="msg_notification_text">Fresh news updates are available</string>
+    <!-- Message when no headline -->
+    <string name="msg_err_no_headline">No headline available</string>
+    
+
 
     <!-- Log messages -->
     <string name="log_on_update">onUpdate</string>

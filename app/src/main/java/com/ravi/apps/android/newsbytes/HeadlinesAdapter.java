@@ -88,7 +88,8 @@ public class HeadlinesAdapter extends CursorAdapter {
                 viewHolder.thumbnailView.setImageBitmap(thumbnailBitmap);
                 viewHolder.thumbnailView.setScaleType(ImageView.ScaleType.FIT_XY);
             } else {
-                // TODO: Display image not available message.
+                // Show thumbnail placeholder icon.
+                viewHolder.thumbnailView.setImageResource(R.drawable.ic_thumbnail_placeholder);
             }
         } else {
             // Get the thumbnail uri.
@@ -102,10 +103,12 @@ public class HeadlinesAdapter extends CursorAdapter {
                 // Load the thumbnail into image view using Picasso.
                 Picasso.with(context)
                         .load(url)
+                        .placeholder(R.drawable.ic_thumbnail_placeholder)
                         .fit()
                         .into(viewHolder.thumbnailView);
             } else {
-                // TODO: Display image not available message.
+                // Show thumbnail placeholder icon.
+                viewHolder.thumbnailView.setImageResource(R.drawable.ic_thumbnail_placeholder);
             }
         }
 
@@ -117,7 +120,9 @@ public class HeadlinesAdapter extends CursorAdapter {
             viewHolder.headlineView.setText(headline);
             viewHolder.headlineView.setContentDescription(headline);
         } else {
-            // TODO: Display headline not available message.
+            // Display headline not available message.
+            viewHolder.headlineView.setText(context.getString(R.string.msg_err_no_headline));
+            viewHolder.headlineView.setContentDescription(context.getString(R.string.msg_err_no_headline));
         }
 
         // Generate transition names for shared elements for devices running lollipop or above.
