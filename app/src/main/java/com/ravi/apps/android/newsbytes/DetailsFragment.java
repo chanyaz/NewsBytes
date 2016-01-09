@@ -398,9 +398,8 @@ public class DetailsFragment extends Fragment
                 mPhoto.setImageBitmap(photoBitmap);
                 mPhoto.setScaleType(ImageView.ScaleType.FIT_XY);
             } else {
-                // TODO: Set photo placeholder.
                 // Show photo placeholder icon and log error message.
-                mPhoto.setImageResource(R.drawable.thumbnail_placeholder);
+                mPhoto.setImageResource(R.drawable.photo_placeholder);
                 Log.e(LOG_TAG, getString(R.string.msg_err_no_photo));
             }
         } else {
@@ -410,9 +409,8 @@ public class DetailsFragment extends Fragment
                         .load(mNews.getUriPhoto())
                         .into(mPhotoTarget);
             } else {
-                // TODO: Set photo placeholder.
                 // Show photo placeholder icon and log error message.
-                mPhoto.setImageResource(R.drawable.thumbnail_placeholder);
+                mPhoto.setImageResource(R.drawable.photo_placeholder);
                 Log.e(LOG_TAG, getString(R.string.msg_err_no_photo));            }
         }
 
@@ -478,9 +476,11 @@ public class DetailsFragment extends Fragment
         }
 
         // Set the date.
-        if(mNews.getDate() != null && !mNews.getDate().isEmpty()) {
-            mDate.setText(mNews.getDate());
-            mDate.setContentDescription(mNews.getDate());
+        if(mNews.getDate() != null && !mNews.getDate().isEmpty()
+                && Utility.getFormattedDate(getActivity(), mNews.getDate()) != null) {
+            String date = Utility.getFormattedDate(getActivity(), mNews.getDate());
+            mDate.setText(date);
+            mDate.setContentDescription(date);
         } else {
             // Date is not available, remove the view and log error message.
             ((ViewGroup) mDate.getParent()).removeView(mDate);

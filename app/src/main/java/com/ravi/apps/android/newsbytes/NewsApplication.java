@@ -44,7 +44,6 @@ public class NewsApplication extends Application {
             // Enable auto tracking.
             googleAnalytics.enableAutoActivityReports(this);
         }
-
     }
 
     // Returns the tracker instance.

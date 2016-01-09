@@ -6,7 +6,9 @@
     <string name="title_activity_settings">Settings</string>
 
     <!-- The New York Times API key -->
-    <string name="nyt_api_key" translatable="false">key</string>
+    <string name="nyt_api_key" translatable="false">nyt-api-key</string>
+    <!-- Google Analytics tracking Id -->
+    <string name="ga_tracking_id" translatable="false">ga-tracking-id</string>
     <!-- Banner ad unit id -->
     <string name="banner_ad_unit_id" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
 
@@ -50,9 +52,9 @@
     <!-- Label for news category : Favorites -->
     <string name="label_news_category_favorites">Favorites</string>
     <!-- Label for mark as favorite button -->
-    <string name="label_mark_as_favorite">MARK AS\nFAVORITE</string>
+    <string name="label_mark_as_favorite">FAVORITE</string>
     <!-- Label for read more button -->
-    <string name="label_read_more">READ\nMORE</string>
+    <string name="label_read_more">MORE</string>
     <!-- Label for dialog ok button -->
     <string name="label_dialog_ok">OK</string>
     <!-- Label for copyright -->
@@ -101,6 +103,8 @@
     <string name="msg_err_no_date">No date available</string>
     <!-- Message when no summary -->
     <string name="msg_err_no_summary">No summary available</string>
+    <!-- Message when invalid date format -->
+    <string name="msg_err_invalid_date">Invalid date format</string>
 
     <!-- Log messages -->
     <string name="log_on_update">onUpdate</string>
@@ -120,18 +124,12 @@
     <string name="log_sync_completed">Sync completed</string>
     <string name="log_rows_deleted">Rows deleted:</string>
     <string name="log_rows_inserted">Rows inserted:</string>
-    <string name="log_on_perform_sync_error">onPerformSync: Error:</string>
+    <string name="log_on_perform_sync_io_error">onPerformSync: IO Error:</string>
+    <string name="log_on_perform_sync_json_error">onPerformSync: JSON Error:</string>
     <string name="log_on_load_finished_empty">onLoadFinished: Empty cursor</string>
     <string name="log_on_load_finished_null">onLoadFinished: Null cursor</string>
     <string name="log_photo_load_failed">Failed to load photo</string>
     <string name="log_thumbnail_load_failed">Failed to load thumbnail</string>
-
-
-
-
-
-
-
 
     <!-- Error conditions -->
     <!-- Exception when application is unable to connect to the host -->
@@ -142,8 +140,6 @@
     <string name="err_zero_results">Query returned zero results</string>
     <!-- Exception when insert failed -->
     <string name="err_insert_failed">Failed to insert row into: </string>
-
-
 
     <!-- Sets the data type for the share intent -->
     <string name="type_share_intent">text/plain</string>
@@ -157,11 +153,5 @@
     <string name="ascending_sort_order" translatable="false">" ASC"</string>
     <!-- Descending sort order for the query -->
     <string name="descending_sort_order" translatable="false">" DESC"</string>
-
-
-
-
-
-
 
 </resources>

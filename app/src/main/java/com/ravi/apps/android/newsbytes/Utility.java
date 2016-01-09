@@ -22,14 +22,23 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.widget.ImageView;
 
 import java.io.ByteArrayOutputStream;
+import java.text.DateFormatSymbols;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Provides various utility methods.
  */
 public class Utility {
+    // Tag for logging messages.
+    public static final String LOG_TAG = Utility.class.getSimpleName();
+
     /**
      * Returns a string containing the current news category preference
      * retrieved from the shared preferences.
@@ -142,5 +151,65 @@ public class Utility {
         }
 
         return thumbnailByteArray;
+    }
+
+    /**
+     * Extracts, formats and returns the date in string format from the raw string passed in.
+     */
+    public static String getFormattedDate(Context context, String inputDate) {
+        try {
+            // Holds the final converted date string.
+            String date = null;
+
+            // Create a string builder to hold the intermediate result string.
+            StringBuilder result = new StringBuilder();
+
+            // Convert source string into char array and iterate through it. Break upon finding
+            // the character 'T'.
+            for(char c : inputDate.toCharArray()) {
+                if(c == 'T') {
+                    break;
+                } else {
+                    result.append(c);
+                }
+            }
+
+            // Parse the string and get the corresponding date object.
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date parse = simpleDateFormat.parse(result.toString());
+
+            // Set the date into the calendar object.
+            Calendar c = Calendar.getInstance();
+            c.setTime(parse);
+
+            // Compose the date string.
+            date = c.get(Calendar.DATE) + " " +
+                    getMonthForInt(c.get(Calendar.MONTH)) + ", " +
+                    c.get(Calendar.YEAR);
+
+            return date;
+
+        } catch(ParseException e) {
+            Log.e(LOG_TAG, context.getString(R.string.msg_err_invalid_date) + e.getLocalizedMessage());
+        }
+
+        return null;
+    }
+
+    /**
+     * Helper method to get month name give the month number.
+     */
+    private static String getMonthForInt(int num) {
+        // Holds the month name.
+        String month = "";
+
+        // Get the date format symbols for months and extract relevant month.
+        DateFormatSymbols dateFormatSymbols = new DateFormatSymbols();
+        String[] months = dateFormatSymbols.getMonths();
+        if(num >= 0 && num <= 11 ) {
+            month = months[num];
+        }
+
+        return month;
     }
 }

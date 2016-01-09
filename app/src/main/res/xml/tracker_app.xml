@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
-
     <!-- Google analytics parameters -->
-    <string name="ga_trackingId">UA-71898896-1</string>
+    <string name="ga_trackingId">@string/ga_tracking_id</string>
     <bool name="ga_autoActivityTracking">true</bool>
-
     <!-- Screen names for each activity -->
     <screenName name="com.ravi.apps.android.newsbytes.MainActivity">Headlines</screenName>
     <screenName name="com.ravi.apps.android.newsbytes.DetailsActivity">Details</screenName>
     <screenName name="com.ravi.apps.android.newsbytes.SettingsActivity">Settings</screenName>
-
 </resources>

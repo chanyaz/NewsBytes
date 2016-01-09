@@ -16,9 +16,7 @@
 
 package com.ravi.apps.android.newsbytes.widget;
 
-import android.annotation.TargetApi;
 import android.content.Intent;
-import android.os.Build;
 import android.util.Log;
 import android.widget.RemoteViewsService;
 
@@ -27,7 +25,6 @@ import com.ravi.apps.android.newsbytes.R;
 /**
  * Provides the data for the scrollable news headlines collection widget.
  */
-@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class NewsWidgetRemoteViewsService extends RemoteViewsService {
 
     // Tag for logging messages.

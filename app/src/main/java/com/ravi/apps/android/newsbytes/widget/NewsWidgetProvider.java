@@ -16,7 +16,6 @@
 
 package com.ravi.apps.android.newsbytes.widget;
 
-import android.annotation.TargetApi;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
@@ -36,7 +35,6 @@ import com.ravi.apps.android.newsbytes.sync.NewsSyncAdapter;
 /**
  * Provides news headlines collection widgets.
  */
-@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class NewsWidgetProvider extends AppWidgetProvider {
 
     // Tag for logging messages.

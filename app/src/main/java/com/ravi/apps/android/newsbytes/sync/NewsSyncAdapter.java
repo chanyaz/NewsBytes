@@ -95,10 +95,8 @@ public class NewsSyncAdapter extends AbstractThreadedSyncAdapter {
     private final String NYT_FORMAT_NORMAL = "Normal";
 
     // Interval at which to sync with the news server, in seconds.
-    public static final int SYNC_INTERVAL = 30 * 60;    // One hour.
-//    public static final int SYNC_INTERVAL = 60 * 10;    // Three minutes.
-
-    public static final int SYNC_FLEXTIME = SYNC_INTERVAL/3;
+    public static final int SYNC_INTERVAL = 30 * 60;    // Half hour.
+    public static final int SYNC_FLEXTIME = SYNC_INTERVAL / 3;
 
     // News notification id.
     private static final int NEWS_NOTIFICATION_ID = 1234;
@@ -250,10 +248,10 @@ public class NewsSyncAdapter extends AbstractThreadedSyncAdapter {
             sendNewsNotification(getContext());
 
         } catch(IOException e) {
-            Log.e(LOG_TAG, getContext().getString(R.string.log_on_perform_sync_error)
+            Log.e(LOG_TAG, getContext().getString(R.string.log_on_perform_sync_io_error)
                     + e.getLocalizedMessage());
         } catch(JSONException e) {
-            Log.e(LOG_TAG, getContext().getString(R.string.log_on_perform_sync_error)
+            Log.e(LOG_TAG, getContext().getString(R.string.log_on_perform_sync_json_error)
                     + e.getLocalizedMessage());
         } finally {
             // Close url connection, if open.
@@ -266,7 +264,7 @@ public class NewsSyncAdapter extends AbstractThreadedSyncAdapter {
                 try {
                     bufferedReader.close();
                 } catch(final IOException e) {
-                    Log.e(LOG_TAG, getContext().getString(R.string.log_on_perform_sync_error)
+                    Log.e(LOG_TAG, getContext().getString(R.string.log_on_perform_sync_io_error)
                             + e.getLocalizedMessage());
                 }
             }
@@ -500,7 +498,7 @@ public class NewsSyncAdapter extends AbstractThreadedSyncAdapter {
             Log.d(LOG_TAG, getContext().getString(R.string.log_rows_deleted) + rowsDeleted);
             Log.d(LOG_TAG, getContext().getString(R.string.log_rows_inserted) + rowsInserted);
 
-        } catch (JSONException e) {
+        } catch(JSONException e) {
             Log.e(LOG_TAG, e.getMessage(), e);
             e.printStackTrace();
         }

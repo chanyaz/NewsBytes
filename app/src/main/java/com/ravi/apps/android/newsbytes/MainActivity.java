@@ -90,7 +90,6 @@ public class MainActivity extends AppCompatActivity
         // Get the toolbar and set it as the action bar.
         mToolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(mToolbar);
-//        mToolbar.setTitleTextAppearance(this, Tex);
 
         // Get the banner ad view.
         mAdView = (AdView) findViewById(R.id.adview);
@@ -104,9 +103,6 @@ public class MainActivity extends AppCompatActivity
             mIsTwoPaneMode = true;
         } else {
             mIsTwoPaneMode = false;
-
-            // Set the app bar elevation.
-//            getSupportActionBar().setElevation(0f);
         }
 
         // Check if it was a configuration change.
@@ -171,6 +167,16 @@ public class MainActivity extends AppCompatActivity
 
             // Reset the preference changed flag.
             mHasPreferenceChanged = false;
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        // if it's in two pane mode, then save the preference changed flag.
+        if(mIsTwoPaneMode) {
+            outState.putBoolean(PREFERENCE_CHANGED_KEY, mHasPreferenceChanged);
         }
     }
 

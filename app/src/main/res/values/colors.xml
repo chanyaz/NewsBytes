@@ -3,20 +3,14 @@
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
     <color name="grey">#cccccc</color>
+    <color name="grey_50">#FAFAFA</color>
+    <color name="grey_100">#F5F5F5</color>
     <color name="grey_700">#646464</color>
     <color name="grey_800">#424242</color>
-
-    <color name="sunshine_light_blue">#ff64c2f4</color>
-    <color name="sunshine_blue">#ff1ca8f4</color>
-    <color name="sunshine_dark_blue">#0288D1</color>
-
-    <color name="photo_placeholder">#ccc</color>
-    <color name="theme_primary">#04561A</color>
-    <color name="theme_primary_dark">#04561A</color>
-    <color name="theme_accent">#04561A</color>
-    <color name="ltgray">#ffe0e0e0</color>
-
-
+    <color name="grey_900">#212121</color>
+    <color name="blue">#ff1ca8f4</color>
+    <color name="light_blue">#ff64c2f4</color>
+    <color name="dark_blue">#0288D1</color>
 
     <!-- Red 300 -->
     <color name="colorPrimaryLight">#E57373</color>
@@ -26,8 +20,4 @@
     <color name="colorPrimaryDark">#D32F2F</color>
     <!-- Purple A700 -->
     <color name="colorAccent">#6200EA</color>
-
-
-
-
 </resources>

@@ -16,7 +16,6 @@
 
 package com.ravi.apps.android.newsbytes.sync;
 
-
 import android.accounts.AbstractAccountAuthenticator;
 import android.accounts.Account;
 import android.accounts.AccountAuthenticatorResponse;

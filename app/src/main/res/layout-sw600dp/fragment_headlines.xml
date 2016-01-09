@@ -10,8 +10,8 @@
         android:id="@+id/headline_framelayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp">
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp">
 
         <!-- Displays a list of news headlines and thumbnails -->
         <ListView
@@ -28,7 +28,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="@string/msg_status_loading"
-            android:textColor="@color/black"
             android:gravity="center"
             android:fontFamily="sans-serif-condensed"
             style="@android:style/TextAppearance.Large"

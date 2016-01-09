@@ -7,8 +7,8 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:gravity="center_vertical"
-    android:paddingTop="8dp"
-    android:paddingBottom="8dp"
+    android:paddingTop="12dp"
+    android:paddingBottom="12dp"
     android:minHeight="?android:attr/listPreferredItemHeight"
     android:background="@drawable/list_touch_selector"
     android:layoutDirection="locale">
@@ -16,8 +16,8 @@
     <!-- Thumbnail -->
     <ImageView
         android:id="@+id/thumbnail_imageview"
-        android:layout_width="72dp"
-        android:layout_height="72dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:scaleType="centerCrop"/>
 
     <!-- Headlines -->
@@ -27,11 +27,11 @@
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif"
         android:textStyle="bold"
-        android:textSize="16sp"
+        android:textSize="20sp"
         android:textColor="@color/black"
         android:contentDescription="@string/a11y_headline"
         android:textDirection="locale"
-        android:paddingStart="16dp"
+        android:paddingStart="24dp"
         android:maxLines="3"
         android:ellipsize="end"/>
 

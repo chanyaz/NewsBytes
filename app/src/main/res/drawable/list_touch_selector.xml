@@ -2,16 +2,14 @@
 
 <!-- Headlines list view item touch selector -->
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-
     <!-- View is in pressed state, but hasn't yet been activated -->
     <item android:state_pressed="true"
-        android:drawable="@color/sunshine_light_blue"/>
+        android:drawable="@color/colorPrimaryLight"/>
 
     <!-- View is in activated state -->
     <item android:state_activated="true"
-        android:drawable="@color/sunshine_light_blue"/>
+        android:drawable="@color/colorPrimaryLight"/>
 
     <!-- View is in default state -->
     <item android:drawable="@android:color/transparent" />
-
 </selector>

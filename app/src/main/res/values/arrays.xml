@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <!-- User visible news category options -->
     <string-array name="pref_news_category_entries">
         <item>@string/label_news_category_world</item>
@@ -22,5 +21,4 @@
         <item>5</item>
         <item>6</item>
     </string-array>
-
 </resources>

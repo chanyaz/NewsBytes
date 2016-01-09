@@ -16,12 +16,10 @@
 
 package com.ravi.apps.android.newsbytes.widget;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Binder;
-import android.os.Build;
 import android.util.Log;
 import android.widget.AdapterView;
 import android.widget.RemoteViews;
@@ -35,7 +33,6 @@ import com.ravi.apps.android.newsbytes.data.NewsContract;
 /**
  * Remote adapter that binds to the list view in the news headlines collection widget.
  */
-@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class NewsWidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
     // Tag for logging messages.
