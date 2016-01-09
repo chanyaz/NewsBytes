@@ -6,9 +6,9 @@
     <string name="title_activity_settings">Settings</string>
 
     <!-- The New York Times API key -->
-    <string name="nyt_api_key" translatable="false">nyt-api-key</string>
+    <string name="nyt_api_key" translatable="false">nyt_api_key</string>
     <!-- Google Analytics tracking Id -->
-    <string name="ga_tracking_id" translatable="false">ga-tracking-id</string>
+    <string name="ga_tracking_id" translatable="false">ga_tracking_id</string>
     <!-- Banner ad unit id -->
     <string name="banner_ad_unit_id" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
 

@@ -9,8 +9,8 @@
 
     <!-- Toolbar -->
     <include
-        android:id="@+id/tool_bar"
-        layout="@layout/tool_bar">
+        android:id="@+id/app_bar_layout"
+        layout="@layout/app_bar">
     </include>
 
     <!-- News headlines -->
@@ -22,7 +22,7 @@
         android:layout_height="match_parent"
         tools:layout="@layout/fragment_headlines"
         android:layout_above="@+id/space_view"
-        android:layout_below="@+id/tool_bar"/>
+        android:layout_below="@+id/app_bar_layout"/>
 
     <!-- Separator -->
     <View

@@ -9,8 +9,8 @@
 
     <!-- Toolbar -->
     <include
-        android:id="@+id/tool_bar"
-        layout="@layout/tool_bar">
+        android:id="@+id/app_bar_layout"
+        layout="@layout/app_bar">
     </include>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -20,7 +20,7 @@
         android:baselineAligned="false"
         android:divider="?android:attr/dividerVertical"
         android:layout_above="@+id/space_view"
-        android:layout_below="@+id/tool_bar">
+        android:layout_below="@+id/app_bar_layout">
 
         <!-- News headlines -->
         <fragment
