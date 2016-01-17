@@ -38,6 +38,7 @@ use the "gradlew build" command or use "Import Project" in Android Studio.
 
 The app uses the following API keys that must be specified in the strings.xml
 file:
+
 1. New York times Developer API Key: This used in the query to fetch the news
 data from the The New York Times Developer API and can be generated 
 [here](http://developer.nytimes.com/apps/register).
