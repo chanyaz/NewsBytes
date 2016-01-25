@@ -182,7 +182,12 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        // Set the preference changed flag if it's in two pane mode.
+        // If the news notifications preference was changed, do nothing.
+        if(key.equals(getString(R.string.pref_notifications_key))) {
+            return;
+        }
+
+        // Set the news category preference changed flag if it's in two pane mode.
         if(mIsTwoPaneMode) {
             mHasPreferenceChanged = true;
         }

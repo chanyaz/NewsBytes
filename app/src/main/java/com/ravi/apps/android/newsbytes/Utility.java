@@ -40,6 +40,30 @@ public class Utility {
     public static final String LOG_TAG = Utility.class.getSimpleName();
 
     /**
+     * Returns a boolean signifying whether the notifications preference is on.
+     */
+    public static boolean getNewsNotificationsPreference(Context context, String key) {
+        // Get shared preferences.
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+
+        // Get the news notifications key and default value from resources.
+        String newsNotificationsKey = null;
+        if(key != null) {
+            newsNotificationsKey = key;
+        } else {
+            newsNotificationsKey = context.getString(R.string.pref_notifications_key);
+        }
+        String newsNotificationsDefault = context.getString(R.string.pref_notifications_default);
+        boolean defaultValue = newsNotificationsDefault
+                .equals(context.getString(R.string.pref_notifications_true))? true : false;
+
+        // Retrieve the news notifications value from shared preferences.
+        boolean newsNotificationsValue = sharedPreferences.getBoolean(newsNotificationsKey, defaultValue);
+
+        return newsNotificationsValue;
+    }
+
+    /**
      * Returns a string containing the current news category preference
      * retrieved from the shared preferences.
      */

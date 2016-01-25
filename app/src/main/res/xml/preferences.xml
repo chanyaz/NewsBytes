@@ -8,4 +8,10 @@
         android:entries="@array/pref_news_category_entries"
         android:entryValues="@array/pref_news_category_entry_values"
         android:defaultValue="@string/pref_news_category_world"/>
+    <CheckBoxPreference
+        android:key="@string/pref_notifications_key"
+        android:title="@string/pref_notifications_title"
+        android:summaryOn="@string/pref_notifications_enabled"
+        android:summaryOff="@string/pref_notifications_disabled"
+        android:defaultValue="true"/>
 </PreferenceScreen>

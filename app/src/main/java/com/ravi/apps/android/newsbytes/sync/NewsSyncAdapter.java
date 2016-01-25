@@ -245,8 +245,9 @@ public class NewsSyncAdapter extends AbstractThreadedSyncAdapter {
             Utility.sendDataUpdatedBroadcast(getContext());
 
             // Send a notification to the user that fresh news updates are now available.
-            sendNewsNotification(getContext());
-
+            if(Utility.getNewsNotificationsPreference(getContext(), null)) {
+                sendNewsNotification(getContext());
+            }
         } catch(IOException e) {
             Log.e(LOG_TAG, getContext().getString(R.string.log_on_perform_sync_io_error)
                     + e.getLocalizedMessage());
