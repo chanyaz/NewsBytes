@@ -83,6 +83,10 @@
         <service
             android:name=".service.AddFavoriteService">
         </service>
+        <!-- Intent service to delete all favorite news stories from content provider -->
+        <service
+            android:name=".service.DeleteAllFavoritesService">
+        </service>
         <!-- News widget provider -->
         <receiver
             android:name=".widget.NewsWidgetProvider">

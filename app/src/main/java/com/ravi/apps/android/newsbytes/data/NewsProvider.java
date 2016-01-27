@@ -238,7 +238,7 @@ public class NewsProvider extends ContentProvider {
 
         if(selection == null) selection = "1";
 
-        switch (uriMatch) {
+        switch(uriMatch) {
             case NEWS: {
                 // Delete from news table.
                 rowsDeleted = writeDb.delete(NewsEntry.TABLE_NAME, selection, selectionArgs);
@@ -251,7 +251,7 @@ public class NewsProvider extends ContentProvider {
         }
 
         // Notify any observers only if any deletions were made.
-        if (rowsDeleted != 0)
+        if(rowsDeleted != 0)
             getContext().getContentResolver().notifyChange(uri, null);
 
         return rowsDeleted;

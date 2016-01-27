@@ -44,7 +44,12 @@ public class DeleteAllFavoritesService extends IntentService {
     }
 
     private void deleteAllFavorites() {
+        // Selection criteria and arguments.
+        final String selection = NewsContract.NewsEntry.COLUMN_IS_FAVORITE + "=?";
+        String[] selectionArgs;
+        selectionArgs = new String[]{Integer.toString(1)};
+
         // Delete from database through content provider.
-        mContentResolver.delete(NewsContract.NewsEntry.CONTENT_URI, null, null);
+        mContentResolver.delete(NewsContract.NewsEntry.CONTENT_URI, selection, selectionArgs);
     }
 }

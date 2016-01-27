@@ -291,7 +291,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         // Check if the settings item was selected.
-        if (id == R.id.action_settings) {
+        if(id == R.id.action_settings) {
             // Start the settings activity.
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);

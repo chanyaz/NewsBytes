@@ -242,6 +242,13 @@ public class HeadlinesFragment extends Fragment
                 // Display and log message.
                 mEmptyListView.setText(getString(R.string.msg_empty_news_list));
                 Log.d(LOG_TAG, getString(R.string.log_on_load_finished_empty));
+
+                // Relinquish cursor attached to the adapter.
+                mHeadlinesAdapter.swapCursor(null);
+
+                // Send a local broadcast informing the widget to refresh it's data.
+                Utility.sendDataUpdatedBroadcast(getActivity());
+
                 return;
             }
 
@@ -277,6 +284,12 @@ public class HeadlinesFragment extends Fragment
             // Display and log message.
             mEmptyListView.setText(getString(R.string.msg_empty_news_list));
             Log.d(LOG_TAG, getActivity().getString(R.string.log_on_load_finished_null));
+
+            // Relinquish cursor attached to the adapter.
+            mHeadlinesAdapter.swapCursor(null);
+
+            // Send a local broadcast informing the widget to refresh it's data.
+            Utility.sendDataUpdatedBroadcast(getActivity());
         }
     }
 
