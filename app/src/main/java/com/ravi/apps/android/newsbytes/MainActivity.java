@@ -291,6 +291,7 @@ public class MainActivity extends AppCompatActivity
         // Get id of the menu item selected.
         int id = item.getItemId();
 
+        // Check which menu item was clicked.
         if(id == R.id.action_delete_favorites) {
             // Start the intent service to delete all favorite news stories.
             Intent intent = new Intent(this, DeleteAllFavoritesService.class);
