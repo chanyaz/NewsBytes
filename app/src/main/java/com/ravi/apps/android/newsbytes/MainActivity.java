@@ -35,7 +35,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.ravi.apps.android.newsbytes.service.DeleteAllFavoritesService;
+import com.ravi.apps.android.newsbytes.service.DeleteFavoriteService;
 import com.ravi.apps.android.newsbytes.sync.NewsSyncAdapter;
 
 public class MainActivity extends AppCompatActivity
@@ -294,7 +294,7 @@ public class MainActivity extends AppCompatActivity
         // Check which menu item was clicked.
         if(id == R.id.action_delete_favorites) {
             // Start the intent service to delete all favorite news stories.
-            Intent intent = new Intent(this, DeleteAllFavoritesService.class);
+            Intent intent = new Intent(this, DeleteFavoriteService.class);
             startService(intent);
 
             return true;
