@@ -16,6 +16,7 @@
 
 package com.ravi.apps.android.newsbytes;
 
+import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -40,7 +41,8 @@ import com.ravi.apps.android.newsbytes.sync.NewsSyncAdapter;
 
 public class MainActivity extends AppCompatActivity
         implements HeadlinesFragment.OnHeadlineSelectedListener,
-        SharedPreferences.OnSharedPreferenceChangeListener {
+        SharedPreferences.OnSharedPreferenceChangeListener,
+        DeleteFavoritesDialogFragment.DeleteFavoritesDialogListener {
 
     // Tag for logging messages.
     public static final String LOG_TAG = MainActivity.class.getSimpleName();
@@ -293,9 +295,7 @@ public class MainActivity extends AppCompatActivity
 
         // Check which menu item was clicked.
         if(id == R.id.action_delete_favorites) {
-            // Start the intent service to delete all favorite news stories.
-            Intent intent = new Intent(this, DeleteFavoriteService.class);
-            startService(intent);
+
 
             return true;
         } else if(id == R.id.action_settings) {
@@ -307,6 +307,18 @@ public class MainActivity extends AppCompatActivity
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+        // Start the intent service to delete all favorite news stories.
+        Intent intent = new Intent(this, DeleteFavoriteService.class);
+        startService(intent);
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+
     }
 
     /**
