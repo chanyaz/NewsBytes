@@ -171,4 +171,11 @@
     <!-- Descending sort order for the query -->
     <string name="descending_sort_order" translatable="false">" DESC"</string>
 
+    <!-- Delete all favorites alert dialog related -->
+    <string name="dialog_delete_favorites_title">Delete all favorites?</string>
+    <string name="dialog_delete_favorites_message">You will lose all news stories saved as favorites!</string>
+    <string name="dialog_delete_favorites_delete">Delete</string>
+    <string name="dialog_delete_favorites_cancel">Cancel</string>
+    <string name="dialog_delete_favorites_no_listener">" must implement DeleteFavoritesDialogListener"</string>
+
 </resources>
