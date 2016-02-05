@@ -47,6 +47,8 @@ public class MainActivity extends AppCompatActivity
     // Tag for logging messages.
     public static final String LOG_TAG = MainActivity.class.getSimpleName();
 
+    public static final String DELETE_FAV_DIALOG_TAG = "delete_fav_dialog_tag";
+
     // Keys for the shared element transition.
     public static final String IMAGE_XPOS = "image_xpos";
     public static final String IMAGE_YPOS = "image_ypos";
@@ -295,8 +297,9 @@ public class MainActivity extends AppCompatActivity
 
         // Check which menu item was clicked.
         if(id == R.id.action_delete_favorites) {
-
-
+            // Instantiate and show the delete favorites dialog fragment.
+            new DeleteFavoritesDialogFragment().show(getFragmentManager(), DELETE_FAV_DIALOG_TAG);
+            
             return true;
         } else if(id == R.id.action_settings) {
             // Start the settings activity.
