@@ -65,6 +65,7 @@ public class DeleteFavoritesDialogFragment extends DialogFragment {
         // Construct the alert dialog builder.
         builder.setTitle(R.string.dialog_delete_favorites_title)
                 .setMessage(R.string.dialog_delete_favorites_message)
+                .setIcon(android.R.drawable.ic_dialog_alert)
                 .setPositiveButton(R.string.dialog_delete_favorites_delete,
                         new DialogInterface.OnClickListener() {
                             @Override
