@@ -1,0 +1,207 @@
+<!-- Displays the news story details -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layoutDirection="locale">
+
+    <com.ravi.apps.android.newsbytes.ParallaxScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/parallax_scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_gravity="start"
+            android:orientation="vertical">
+
+            <!-- Photo container -->
+            <FrameLayout
+                android:id="@+id/photo_container"
+                android:layout_width="match_parent"
+                android:layout_height="336dp">
+
+                <!-- Photo -->
+                <ImageView
+                    android:id="@+id/photo_imageview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:contentDescription="@string/a11y_details_photo"
+                    android:nextFocusDown="@+id/caption_textview"/>
+
+            </FrameLayout>
+
+            <!-- Caption -->
+            <TextView
+                android:id="@+id/caption_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed"
+                android:textSize="16sp"
+                android:textColor="@color/grey_800"
+                android:paddingLeft="24dp"
+                android:paddingStart="24dp"
+                android:paddingRight="24dp"
+                android:paddingEnd="24dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:background="@color/grey_100"
+                android:contentDescription="@string/a11y_details_caption"
+                android:nextFocusUp="@+id/photo_imageview"
+                android:nextFocusDown="@+id/headline_textview"
+                android:textDirection="locale"/>
+
+            <!-- Headline -->
+            <TextView
+                android:id="@+id/headline_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif"
+                android:textStyle="bold"
+                android:textSize="28sp"
+                android:textColor="@color/black"
+                android:padding="24dp"
+                android:background="@color/grey_50"
+                android:contentDescription="@string/a11y_headline"
+                android:nextFocusUp="@+id/caption_textview"
+                android:nextFocusDown="@+id/author_textview"
+                android:textDirection="locale"/>
+
+            <!-- Author -->
+            <TextView
+                android:id="@+id/author_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed"
+                android:textSize="16sp"
+                android:textColor="@color/grey_900"
+                android:paddingLeft="24dp"
+                android:paddingStart="24dp"
+                android:paddingRight="24dp"
+                android:paddingEnd="24dp"
+                android:background="@color/grey_50"
+                android:contentDescription="@string/a11y_details_author"
+                android:nextFocusUp="@+id/headline_textview"
+                android:nextFocusDown="@+id/date_textview"
+                android:textDirection="locale"/>
+
+            <!-- Date -->
+            <TextView
+                android:id="@+id/date_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed"
+                android:textSize="16sp"
+                android:textColor="@color/grey_900"
+                android:paddingLeft="24dp"
+                android:paddingStart="24dp"
+                android:paddingRight="24dp"
+                android:paddingEnd="24dp"
+                android:paddingTop="8dp"
+                android:background="@color/grey_50"
+                android:contentDescription="@string/a11y_details_date"
+                android:nextFocusUp="@+id/author_textview"
+                android:nextFocusDown="@+id/summary_textview"
+                android:textDirection="locale"/>
+
+            <!-- Summary -->
+            <TextView
+                android:id="@+id/summary_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif"
+                android:textSize="20sp"
+                android:textColor="@color/grey_900"
+                android:padding="24dp"
+                android:background="@color/grey_50"
+                android:contentDescription="@string/a11y_details_summary"
+                android:nextFocusUp="@+id/date_textview"
+                android:nextFocusDown="@+id/mark_favorite_button"
+                android:textDirection="locale"/>
+
+            <!-- Mark As Favorite and Read More -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingLeft="24dp"
+                android:paddingStart="24dp"
+                android:paddingRight="24dp"
+                android:paddingEnd="24dp"
+                android:paddingBottom="24dp">
+
+                <!-- Mark As Favorite -->
+                <Button
+                    android:id="@+id/mark_favorite_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minWidth="112dp"
+                    android:minHeight="56dp"
+                    android:text="@string/label_mark_as_favorite"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:textColor="@color/black"
+                    android:enabled="false"
+                    android:paddingLeft="20dp"
+                    android:paddingStart="20dp"
+                    android:paddingRight="20dp"
+                    android:paddingEnd="20dp"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp"
+                    android:contentDescription="@string/label_mark_as_favorite"
+                    android:nextFocusUp="@+id/summary_textview"
+                    android:nextFocusRight="@+id/read_more_button"/>
+
+                <!-- Read More -->
+                <Button
+                    android:id="@+id/read_more_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minWidth="112dp"
+                    android:minHeight="56dp"
+                    android:text="@string/label_read_more"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:textColor="@color/black"
+                    android:enabled="true"
+                    android:paddingLeft="20dp"
+                    android:paddingStart="20dp"
+                    android:paddingRight="20dp"
+                    android:paddingEnd="20dp"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginStart="24dp"
+                    android:contentDescription="@string/label_read_more"
+                    android:nextFocusLeft="@+id/mark_favorite_button"
+                    android:nextFocusRight="@+id/share_fab"/>
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </com.ravi.apps.android.newsbytes.ParallaxScrollView>
+
+    <!-- Share FAB -->
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/share_fab"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:src="@drawable/ic_share"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="24dp"
+        app:fabSize="normal"
+        app:backgroundTint="@color/colorAccent"
+        app:elevation="6dp"
+        app:pressedTranslationZ="12dp"
+        app:borderWidth="0dp"
+        android:contentDescription="@string/a11y_share_button"
+        android:nextFocusLeft="@+id/read_more_button"/>
+
+</RelativeLayout>
+

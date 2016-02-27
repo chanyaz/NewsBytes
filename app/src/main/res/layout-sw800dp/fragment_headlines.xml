@@ -1,0 +1,42 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.ravi.apps.android.newsbytes.HeadlinesFragment"
+    android:layoutDirection="locale">
+
+    <FrameLayout
+        android:id="@+id/headline_framelayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp">
+
+        <!-- Displays a list of news headlines and thumbnails -->
+        <ListView
+            android:id="@+id/headlines_listview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@color/grey"
+            android:dividerHeight="0.5sp">
+        </ListView>
+
+        <!-- Displays status message in empty list -->
+        <TextView
+            android:id="@+id/status_listview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/msg_status_loading"
+            android:gravity="center"
+            android:fontFamily="sans-serif-condensed"
+            style="@android:style/TextAppearance.Large"
+            android:contentDescription="@string/msg_status_loading"
+            android:textDirection="locale">
+        </TextView>
+
+    </FrameLayout>
+
+</RelativeLayout>
+
+
