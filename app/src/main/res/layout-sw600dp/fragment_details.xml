@@ -63,7 +63,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif"
                 android:textStyle="bold"
-                android:textSize="28sp"
+                android:textSize="24sp"
                 android:textColor="@color/black"
                 android:padding="24dp"
                 android:background="@color/grey_50"
